@@ -24,7 +24,8 @@ const setupAxios = () => {
   // axios.defaults.baseURL = "http://localhost:5000";
 
   // latest App deploy
-  axios.defaults.baseURL = " https://selliender-api.onrender.com";
+  // axios.defaults.baseURL = " https://selliender-api.onrender.com";
+  axios.defaults.baseURL = "https://api.sellinder.com"
 
   // axios.defaults.baseURL = "https://frameji-api.onrender.com";
 
@@ -42,16 +43,16 @@ const root = createRoot(domNode);
 root.render(
   <Provider store={store}>
     <LinkedinProvider>
-    <LeedsProvider>
-    <PlanProvider>
-    <CustomerProvider>
-      <App />
-      <Toaster />
-     
-    </CustomerProvider>
-     </PlanProvider>
-     </LeedsProvider>
-     </LinkedinProvider>
+      <LeedsProvider>
+        <PlanProvider>
+          <CustomerProvider>
+            <App />
+            <Toaster />
+
+          </CustomerProvider>
+        </PlanProvider>
+      </LeedsProvider>
+    </LinkedinProvider>
   </Provider>
 );
 
