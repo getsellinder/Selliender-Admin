@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./BilingInvoice.css";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { isAutheticated } from "src/auth";
 
 const sample = {
     invoice: "#2942398222",
@@ -21,51 +25,86 @@ const sample = {
 };
 
 const BilingInvoice = () => {
+    const [billingInvoice, setBillingInvoice] = useState([])
+    const [loading, setLoading] = useState(null)
+    const { id } = useParams()
+
+
+
+    const token = isAutheticated();
+
+    const getBilingInvoice = async () => {
+        try {
+            setLoading(id);
+            const res = await axios.get(`/api/billing/get/invoice/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            console.log("res", res)
+            setBillingInvoice(res?.data);
+        } catch (error) {
+            const msg = error.response?.data?.message || "Internal Server Error";
+            toast.error(msg)
+            // setErrorMessage(msg);
+        } finally {
+            setLoading(null);
+        }
+    };
+    useEffect(() => {
+        getBilingInvoice(id)
+
+    }, [id])
     return (
-        <div className="invoice-page">
-            <header className="invoice-header">
-                <div className="invoice-left">
-                    <div className="invoice-icon">i</div>
-                    <div>
-                        <div className="invoice-title">Invoice <span className="invoice-num">{sample.invoice}</span></div>
-                        <div className="invoice-customer">{sample.customer}</div>
+        <>
+            {billingInvoice.map((item, index) => {
+                return (
+                    <div className="invoice-page" key={index}>
+                        <header className="invoice-header">
+                            <div className="invoice-left">
+                                <div className="invoice-icon">i</div>
+                                <div>
+                                    <div className="invoice-title">Invoice <span className="invoice-num">{item.InvoiceNo}</span></div>
+                                    <div className="invoice-customer">{item.userId.name}</div>
+                                </div>
+                            </div>
+                            <div className="invoice-badge">razorpay</div>
+                        </header>
+
+                        <main className="invoice-content">
+                            <section className="card">
+                                <h3 className="card-title"><span className="card-icon">📅</span> Plan Information</h3>
+                                <table className="info-table">
+                                    <tbody>
+                                        <tr><td>Plan Name</td><td>{item.PlanId.name}</td></tr>
+                                        <tr><td>Plan Type</td><td>{item.PlanId.Package}</td></tr>
+                                        <tr><td>Start Date</td><td>{item.plan_start_date}</td></tr>
+                                        <tr><td>Expiry Date</td><td>{item.plan_expiry_date}</td></tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <section className="card">
+                                <h3 className="card-title"><span className="card-icon">💵</span> Payment Information</h3>
+                                <table className="info-table">
+                                    <tbody>
+                                        <tr><td>Razorpay Payment ID</td><td>{item.TransactionId}</td></tr>
+                                        <tr><td>Razorpay Order ID</td><td>{item.RazorpayOrderId}</td></tr>
+                                        <tr><td>Razorpay Signature</td><td className="long">{item.RazorpaySignature}</td></tr>
+                                        {/* <tr><td>IP Address</td><td>{sample.payment.ip}</td></tr> */}
+                                        <tr><td>Paid At</td><td>{item.createdAt}</td></tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <section className="card">
+                                <h3 className="card-title"><span className="card-icon">ℹ️</span> Additional Details</h3>
+                                <div className="additional">{sample.additional}</div>
+                            </section>
+                        </main>
                     </div>
-                </div>
-                <div className="invoice-badge">razorpay</div>
-            </header>
+                )
+            })}
 
-            <main className="invoice-content">
-                <section className="card">
-                    <h3 className="card-title"><span className="card-icon">📅</span> Plan Information</h3>
-                    <table className="info-table">
-                        <tbody>
-                            <tr><td>Plan Name</td><td>{sample.plan.name}</td></tr>
-                            <tr><td>Plan Type</td><td>{sample.plan.type}</td></tr>
-                            <tr><td>Start Date</td><td>{sample.plan.start}</td></tr>
-                            <tr><td>Expiry Date</td><td>{sample.plan.expiry}</td></tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section className="card">
-                    <h3 className="card-title"><span className="card-icon">💵</span> Payment Information</h3>
-                    <table className="info-table">
-                        <tbody>
-                            <tr><td>Razorpay Payment ID</td><td>{sample.payment.paymentId}</td></tr>
-                            <tr><td>Razorpay Order ID</td><td>{sample.payment.orderId}</td></tr>
-                            <tr><td>Razorpay Signature</td><td className="long">{sample.payment.signature}</td></tr>
-                            <tr><td>IP Address</td><td>{sample.payment.ip}</td></tr>
-                            <tr><td>Paid At</td><td>{sample.payment.paidAt}</td></tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <section className="card">
-                    <h3 className="card-title"><span className="card-icon">ℹ️</span> Additional Details</h3>
-                    <div className="additional">{sample.additional}</div>
-                </section>
-            </main>
-        </div>
+        </>
     );
 };
 

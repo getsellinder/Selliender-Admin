@@ -5,6 +5,7 @@ import { isAutheticated } from "src/auth";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
+import { useBilling } from "./billingContext";
 
 const tableheadings = [
     "Date & Time",
@@ -18,6 +19,8 @@ const tableheadings = [
 ];
 
 const Billing = () => {
+    const { billingInvoice, getBilingInvoice } = useBilling()
+    console.log("billingInvoice", billingInvoice)
     const token = isAutheticated();
     const [search, setSearch] = useState();
     const [searchByDate, setSearchByDate] = useState();
@@ -68,7 +71,7 @@ const Billing = () => {
     useEffect(() => {
         getBiling(search, currentPage, itemPerPage, searchByDate);
     }, [search, currentPage, itemPerPage, searchByDate]);
-    console.log("biling", biling);
+
     const summaryData = [
         { title: "Total Sales", value: `${biling?.totalsales}`, color: "#27ae60" },
         // { title: "Total Due Amount", value: "Rs. 8300.00", color: "#e74c3c" },
@@ -188,14 +191,15 @@ const Billing = () => {
                                                     <div>
                                                         <button
                                                             className="orders-view-btn p-2"
-                                                            onClick={() =>
+                                                            onClick={async () => {
+                                                                await getBilingInvoice(r.userId._id)
                                                                 navigate(`/Billing/invoice/${r.userId._id}`)
-                                                            }
+                                                            }}
                                                         >
                                                             Invoice
                                                         </button>
                                                     </div>
-                                                    <div></div>
+
                                                 </div>
                                             </td>
                                         </tr>

@@ -75,7 +75,7 @@ const AppSidebar = () => {
     if (!isNavigationLoading) {
       if (userdata && userdata.role === "Employee") {
         // For employees, include Dashboard and Product Management with all its sub-items
-        const allowedItems = ["Dashboard", "Product Management","Settings","Customer Service","Customers","Orders"];
+        const allowedItems = ["Dashboard", "Product Management", "Settings", "Customer Service", "Customers", "Orders"];
         const filteredNavigation = navigation.filter((item) =>
           allowedItems.includes(item.name)
         );
@@ -133,7 +133,7 @@ const AppSidebar = () => {
     getConfiguration();
   }, []);
 
-  console.log("AdminlogoUrl",AdminlogoUrl)
+  console.log("AdminlogoUrl", AdminlogoUrl)
   return (
     <CSidebar
       position="fixed"
@@ -146,23 +146,11 @@ const AppSidebar = () => {
       <CSidebarBrand
         to="/"
       >
-           <div>
-             {/* <h5 className="sidebar-brand" style={{fontSize:"1.5rem"}}>Sellinder</h5> */}
-             <img src={AdminlogoUrl.url} style={{height:"3.5rem"}}/>
-          </div>
-         
-        {/* {AdminlogoUrl ? (
-          <>
-            <Link to="/dashboard" className="bg-warning">
-              <img src={AdminlogoUrl} alt="" width="100%" />
-            </Link>
-            <CCloseButton className="d-lg-none mx-2" white onClick={() => dispatch(toggleChange(false))} />
-          </>
-        ) : { AppName } ? (
-       
-        ) : (
-          ""
-        )} */}
+        <div>
+          <img src={AdminlogoUrl.url} style={{ height: "3.5rem" }} />
+        </div>
+
+
         <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} />
       </CSidebarBrand>
 
