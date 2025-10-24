@@ -191,10 +191,10 @@ const Billing = () => {
                                                     <div>
                                                         <button
                                                             className="orders-view-btn p-2"
-                                                            onClick={async () => {
-                                                                await getBilingInvoice(r.userId._id)
+                                                            onClick={() =>
+
                                                                 navigate(`/Billing/invoice/${r.userId._id}`)
-                                                            }}
+                                                            }
                                                         >
                                                             Invoice
                                                         </button>

@@ -1,7 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './BilingView.css';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { isAutheticated } from 'src/auth';
 
 const ViewBiling = () => {
+    const [billingInvoiceView, setBillingInvoiceView] = useState([]);
+    const [loading, setLoading] = useState(null);
+    const { id } = useParams();
+
+    const token = isAutheticated();
+
+    const getBilingInvoiceView = async () => {
+        try {
+            setLoading(id);
+            const res = await axios.get(`/api/billing/get/view/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            console.log("res", res);
+            setBillingInvoiceView(res?.data);
+        } catch (error) {
+            const msg = error.response?.data?.message || "Internal Server Error";
+            toast.error(msg);
+            // setErrorMessage(msg);
+        } finally {
+            setLoading(null);
+        }
+    };
+    useEffect(() => {
+        getBilingInvoiceView(id);
+    }, [id]);
+
+    const invoicesWithGST = billingInvoiceView?.invoicesWithGST
+    const referralEmails = billingInvoiceView?.viewReferral?.referralemail || [];
+    console.log("billingInvoiceView", billingInvoiceView)
+
     const user = {
         username: 'mani',
         referralCode: 'X5PHAN',
@@ -18,6 +52,7 @@ const ViewBiling = () => {
         ip: '152.59.201.35'
     };
 
+    console.log("billingInvoiceView", billingInvoiceView)
     const referrals = [
         { name: 'Alice Brown', date: '2024-02-01' },
         { name: 'Bob Wilson', date: '2024-02-15' },
@@ -38,35 +73,44 @@ const ViewBiling = () => {
                         <h3>User Profile</h3>
                     </div>
                     <div className="card-body profile-body">
-                        <div className="profile-row"><div className="label">User Name:</div><div className="value">{user.username}</div></div>
-                        <div className="profile-row"><div className="label">Referral Code:</div><div className="value">{user.referralCode}</div></div>
-                        <div className="profile-row"><div className="label">Plan Name:</div><div className="value">{user.planName}</div></div>
-                        <div className="profile-row"><div className="label">Plan Type:</div><div className="value">{user.planType}</div></div>
-                        <div className="profile-row"><div className="label">Trial Start Date:</div><div className="value">{user.trialStart}</div></div>
-                        <div className="profile-row"><div className="label">Trial End Date:</div><div className="value">{user.trialEnd}</div></div>
-                        <div className="profile-row"><div className="label">Current Subscription Start Date:</div><div className="value">{user.subscriptionStart}</div></div>
-                        <div className="profile-row"><div className="label">Current Subscription End Date:</div><div className="value">{user.subscriptionEnd}</div></div>
-                        <div className="profile-row"><div className="label">Joining Date:</div><div className="value">{user.joiningDate}</div></div>
-                        <div className="profile-row"><div className="label">Status:</div><div className="value">{user.status}</div></div>
-                        <div className="profile-row"><div className="label">Keywords:</div><div className="value">{user.keywords}</div></div>
-                        <div className="profile-row"><div className="label">Mobile Number:</div><div className="value">{user.mobile}</div></div>
-                        <div className="profile-row"><div className="label">IP Address:</div><div className="value">{user.ip}</div></div>
+                        <div className="profile-row"><div className="label">User Name:</div><div className="value">{invoicesWithGST?.userId?.name}</div></div>
+                        {/* <div className="profile-row"><div className="label">Referral Code:</div><div className="value">{invoicesWithGST?.referralCode}</div></div> */}
+                        <div className="profile-row"><div className="label">Plan Name:</div><div className="value">{invoicesWithGST?.PlanId?.name}</div></div>
+                        <div className="profile-row"><div className="label">Plan Type:</div><div className="value">{invoicesWithGST?.PlanId?.Package}</div></div>
+
+                        <div className="profile-row"><div className="label">Current Subscription Start Date:</div><div className="value">{invoicesWithGST?.plan_start_date}</div></div>
+                        <div className="profile-row"><div className="label">Current Subscription End Date:</div><div className="value">{invoicesWithGST?.plan_expiry_date}</div></div>
+                        <div className="profile-row"><div className="label">Joining Date:</div><div className="value">{invoicesWithGST?.createdAt}</div></div>
+                        <div className="profile-row"><div className="label">Status:</div><div className="value">{invoicesWithGST?.status}</div></div>
+                        {/* <div className="profile-row"><div className="label">Keywords:</div><div className="value">{invoicesWithGST.keywords}</div></div> */}
+                        <div className="profile-row"><div className="label">Mobile Number:</div><div className="value">{invoicesWithGST?.userId?.phone}</div></div>
+                        {/* <div className="profile-row"><div className="label">IP Address:</div><div className="value">{invoicesWithGST.ip}</div></div> */}
                     </div>
                 </div>
 
                 <div className="card referrals-card">
                     <div className="card-header green">
-                        <h3>Referrals ({referrals.length})</h3>
+                        <h3>Referrals {referralEmails?.length}</h3>
                     </div>
                     <div className="card-body referrals-body">
+
+
                         <ul>
-                            {referrals.map((r, idx) => (
-                                <li key={idx} className="referral-row">
-                                    <span className="ref-name">{r.name}</span>
-                                    <span className="ref-date">{r.date}</span>
-                                </li>
-                            ))}
+                            {referralEmails?.length > 0 ? (
+                                referralEmails?.map((r, idx) => (
+                                    <li key={r._id || idx} className="referral-row">
+                                        <span className="ref-name">{r?.name}</span>
+                                        <span className="ref-email">{r?.email}</span>
+                                        <span className="ref-date">
+                                            {new Date(r?.date).toLocaleDateString()}
+                                        </span>
+                                    </li>
+                                ))
+                            ) : (
+                                <li>No referral emails found</li>
+                            )}
                         </ul>
+
                     </div>
                 </div>
             </div>
