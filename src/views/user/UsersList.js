@@ -92,18 +92,19 @@ const UsersList = () => {
     const [showData, setShowData] = useState([]);
 
     const [name, setName] = useState("");
+    const limit = 10;
 
 
     const getUsers = async (
         searchName = name,
         page = currentPage,
-        limit = itemPerPage
+
     ) => {
         axios
             .get(`/api/customer/customers`, {
                 params: {
-                    limit: limit,
-                    page: page,
+                    limit,
+                    page,
                     name: searchName,
                 },
                 headers: {
@@ -112,7 +113,7 @@ const UsersList = () => {
             })
             .then((res) => {
                 setShowData(res?.data);
-                setTotalPages(res.data.total_pages);
+                setTotalPages(res?.data?.totalPages);
                 setLoading(false);
             })
             .catch((error) => {
@@ -126,17 +127,20 @@ const UsersList = () => {
                 setLoading(false);
             });
     };
+    console.log("totalpages", totalpages)
 
-    const handleShowEntries = (e) => {
-        let newlimit = e.target.value;
-        setCurrentPage(1);
-        setItemPerPage(newlimit);
-        getUsers(name, 1, newlimit);
+
+    const handlePrev = () => {
+        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+    };
+
+    const handleNext = () => {
+        if (currentPage < totalpages) setCurrentPage(prev => prev + 1);
     };
 
     useEffect(() => {
         getUsers();
-    }, [success]);
+    }, [currentPage]);
 
     const handleToggle = async (id) => {
         try {
@@ -158,7 +162,7 @@ const UsersList = () => {
         }
     };
 
-    console.log("showData?.data?", showData.users);
+
     return (
         <div className="users-page">
             <div className="cards-row">
@@ -247,6 +251,40 @@ const UsersList = () => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+            <div className="orders-pagination">
+                <button
+                    className="orders-page-btn"
+                    onClick={handlePrev}
+                    disabled={currentPage === 1}
+                >
+                    ‹
+                </button>
+
+                {Array.from({ length: showData.totalPages }, (_, i) => {
+                    const isActive = currentPage === i + 1;
+                    return (
+                        <button
+                            key={i + 1}
+                            className={
+                                isActive
+                                    ? "orders-page-num-active"
+                                    : "orders-page-num-inactive"
+                            }
+                            onClick={() => setCurrentPage(i + 1)}
+                        >
+                            {i + 1}
+                        </button>
+                    );
+                })}
+
+                <button
+                    className="orders-page-btn"
+                    onClick={handleNext}
+                    disabled={currentPage === totalpages}
+                >
+                    ›
+                </button>
             </div>
         </div>
     );
