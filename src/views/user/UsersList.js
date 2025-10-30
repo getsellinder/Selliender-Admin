@@ -93,42 +93,6 @@ const UsersList = () => {
 
     const [name, setName] = useState("");
     const limit = 10;
-
-
-    // const getUsers = async (
-    //     searchName = name,
-    //     page = currentPage,
-
-    // ) => {
-    //     axios
-    //         .get(`/api/customer/customers`, {
-    //             params: {
-    //                 limit,
-    //                 page,
-    //                 name: searchName,
-    //             },
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //         })
-    //         .then((res) => {
-    //             setShowData(res?.data);
-    //             setTotalPages(res?.data?.totalPages);
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             swal({
-    //                 title: error,
-    //                 text: "please login to access the resource or refresh the page  ",
-    //                 icon: "error",
-    //                 button: "Retry",
-    //                 dangerMode: true,
-    //             });
-    //             setLoading(false);
-    //         });
-    // };
-    console.log("totalpages", totalpages)
-
     const getUsers = async (searchName = name, page = currentPage) => {
         try {
             setLoading(true)
@@ -220,8 +184,9 @@ const UsersList = () => {
                     placeholder="Search users"
                     value={name}
                     onChange={(e) => {
-                        setName(e.target.value)
-                        getUsers(name, 1, itemPerPage);
+                        const value = e.target.value
+                        setName(value)
+                        getUsers(value, 1, itemPerPage);
                     }}
                 />
             </div>
@@ -302,8 +267,8 @@ const UsersList = () => {
                             key={i + 1}
                             className={
                                 isActive
-                                    ? "orders-page-num-active"
-                                    : "orders-page-num-inactive"
+                                    ? "  orders-page-num-inactive"
+                                    : "orders-page-num-active"
                             }
                             onClick={() => setCurrentPage(i + 1)}
                         >
