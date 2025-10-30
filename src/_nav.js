@@ -161,13 +161,13 @@ const _nav = [
   },
 
 
-  {
-    component: CNavItem,
-    name: "Employees & Access",
-    icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
-    to: "/employee",
-    group: "Employees & Access",
-  },
+  // {
+  //   component: CNavItem,
+  //   name: "Employees & Access",
+  //   icon: <CIcon icon={cilContact} customClassName="nav-icon" />,
+  //   to: "/employee",
+  //   group: "Employees & Access",
+  // },
 
   {
     component: CNavGroup,

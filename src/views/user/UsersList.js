@@ -79,7 +79,7 @@ const UsersList = () => {
     const token = isAutheticated();
 
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [toggleLoading, setToggleLoading] = useState(null);
 
 
@@ -95,13 +95,44 @@ const UsersList = () => {
     const limit = 10;
 
 
-    const getUsers = async (
-        searchName = name,
-        page = currentPage,
+    // const getUsers = async (
+    //     searchName = name,
+    //     page = currentPage,
 
-    ) => {
-        axios
-            .get(`/api/customer/customers`, {
+    // ) => {
+    //     axios
+    //         .get(`/api/customer/customers`, {
+    //             params: {
+    //                 limit,
+    //                 page,
+    //                 name: searchName,
+    //             },
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         })
+    //         .then((res) => {
+    //             setShowData(res?.data);
+    //             setTotalPages(res?.data?.totalPages);
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             swal({
+    //                 title: error,
+    //                 text: "please login to access the resource or refresh the page  ",
+    //                 icon: "error",
+    //                 button: "Retry",
+    //                 dangerMode: true,
+    //             });
+    //             setLoading(false);
+    //         });
+    // };
+    console.log("totalpages", totalpages)
+
+    const getUsers = async (searchName = name, page = currentPage) => {
+        try {
+            setLoading(true)
+            let resp = await axios.get(`/api/customer/customers`, {
                 params: {
                     limit,
                     page,
@@ -111,25 +142,17 @@ const UsersList = () => {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            .then((res) => {
-                setShowData(res?.data);
-                setTotalPages(res?.data?.totalPages);
-                setLoading(false);
-            })
-            .catch((error) => {
-                swal({
-                    title: error,
-                    text: "please login to access the resource or refresh the page  ",
-                    icon: "error",
-                    button: "Retry",
-                    dangerMode: true,
-                });
-                setLoading(false);
-            });
-    };
-    console.log("totalpages", totalpages)
+            setShowData(resp?.data);
+            setTotalPages(resp?.data?.totalPages);
 
+        } catch (error) {
+            let res = error.response.data.message
+            console.log("error", error)
 
+        } finally {
+            setLoading(false)
+        }
+    }
     const handlePrev = () => {
         if (currentPage > 1) setCurrentPage(prev => prev - 1);
     };
@@ -170,21 +193,21 @@ const UsersList = () => {
                     <div className="stat-icon">📈</div>
                     <div className="stat-body">
                         <div className="stat-title">Total Users</div>
-                        <div className="stat-value">{showData?.totalUsers}</div>
+                        <div className="stat-value">{loading ? <CircularProgress /> : showData?.totalUsers}</div>
                     </div>
                 </div>
                 <div className="stat-card green">
                     <div className="stat-icon">👤</div>
                     <div className="stat-body">
                         <div className="stat-title">Active Users</div>
-                        <div className="stat-value">{showData?.activeUsers}</div>
+                        <div className="stat-value">{loading ? <CircularProgress /> : showData?.activeUsers}</div>
                     </div>
                 </div>
                 <div className="stat-card pink">
                     <div className="stat-icon">👁️</div>
                     <div className="stat-body">
                         <div className="stat-title">Suspended Users</div>
-                        <div className="stat-value">{showData?.InactiveUsers}</div>
+                        <div className="stat-value">{loading ? <CircularProgress /> : showData?.InactiveUsers}</div>
                     </div>
                 </div>
 
@@ -213,7 +236,17 @@ const UsersList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {showData?.result?.map((user, index) => (
+                        {loading ? <tr>
+                            <td colSpan="9" className="text-center py-10">
+                                <div className="flex justify-center items-center">
+                                    <CircularProgress
+                                        size={50}
+                                        thickness={5}
+                                        style={{ color: "#1976d2" }}
+                                    />
+                                </div>
+                            </td>
+                        </tr> : showData?.result?.map((user, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{user?.name}</td>
@@ -249,6 +282,7 @@ const UsersList = () => {
                                 </td>
                             </tr>
                         ))}
+
                     </tbody>
                 </table>
             </div>

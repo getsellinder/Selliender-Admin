@@ -16,7 +16,7 @@
 .users-table-wrap { background: #fff; border-radius:10px; box-shadow: 0 6px 18px rgba(36,41,61,0.06); overflow:hidden }
 .users-table { width:100%; border-collapse: collapse; }
 .users-table thead th { padding:10px 25px; text-align:left; color:#4b5563; border-bottom:1px solid rgba(36,41,61,0.06) }
-.users-table tbody td { padding:15px; color:#233b7a; border-bottom:1px solid rgba(36,41,61,0.04) }
+.users-table tbody td { padding:8px; color:#233b7a; border-bottom:1px solid rgba(36,41,61,0.04) }
 .users-table tbody tr td.center { text-align:center }
 .actions { display:flex; gap:12px }
 .btn-action { background:#0b0b0b; color:#fff; padding:10px 16px; border-radius:8px; border:none; cursor:pointer }
