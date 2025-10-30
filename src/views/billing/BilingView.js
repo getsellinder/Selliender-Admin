@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './BilingView.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { isAutheticated } from 'src/auth';
+import { useBilling } from './billingContext';
 
 const ViewBiling = () => {
     const [billingInvoiceView, setBillingInvoiceView] = useState([]);
     const [loading, setLoading] = useState(null);
+    const { billingInvoice, data } = useBilling()
     const { id } = useParams();
+    const navigate = useNavigate()
+
+    console.log("ViewBiling....................", billingInvoice, data)
 
     const token = isAutheticated();
 
@@ -33,8 +38,10 @@ const ViewBiling = () => {
     }, [id]);
 
     const invoicesWithGST = billingInvoiceView?.invoicesWithGST
-    const referralEmails = billingInvoiceView?.viewReferral?.referralemail || [];
-    console.log("billingInvoiceView", billingInvoiceView)
+    const referralEmails = billingInvoiceView?.viewReferral?.referralemail;
+    console.log("invoicesWithGST", invoicesWithGST)
+    console.log("referralEmails", billingInvoiceView.viewReferral)
+
 
     const user = {
         username: 'mani',
@@ -64,7 +71,7 @@ const ViewBiling = () => {
         <div className="userpage-container">
             <div className="userpage-actions">
                 <button className="btn btn-outline">Go to All Users</button>
-                <button className="btn btn-primary">User Invoices</button>
+                <button className="btn btn-primary" onClick={() => navigate(`/Billing/invoice/${invoicesWithGST?.userId?._id}`)}>User Invoices</button>
             </div>
 
             <div className="userpage-grid">
@@ -74,21 +81,20 @@ const ViewBiling = () => {
                     </div>
                     <div className="card-body profile-body">
                         <div className="profile-row"><div className="label">User Name:</div><div className="value">{invoicesWithGST?.userId?.name}</div></div>
-                        {/* <div className="profile-row"><div className="label">Referral Code:</div><div className="value">{invoicesWithGST?.referralCode}</div></div> */}
+
                         <div className="profile-row"><div className="label">Plan Name:</div><div className="value">{invoicesWithGST?.PlanId?.name}</div></div>
                         <div className="profile-row"><div className="label">Plan Type:</div><div className="value">{invoicesWithGST?.PlanId?.Package}</div></div>
 
                         <div className="profile-row"><div className="label">Current Subscription Start Date:</div><div className="value">{invoicesWithGST?.plan_start_date}</div></div>
                         <div className="profile-row"><div className="label">Current Subscription End Date:</div><div className="value">{invoicesWithGST?.plan_expiry_date}</div></div>
                         <div className="profile-row"><div className="label">Joining Date:</div><div className="value">{invoicesWithGST?.createdAt}</div></div>
-                        <div className="profile-row"><div className="label">Status:</div><div className="value">{invoicesWithGST?.status}</div></div>
-                        {/* <div className="profile-row"><div className="label">Keywords:</div><div className="value">{invoicesWithGST.keywords}</div></div> */}
-                        <div className="profile-row"><div className="label">Mobile Number:</div><div className="value">{invoicesWithGST?.userId?.phone}</div></div>
-                        {/* <div className="profile-row"><div className="label">IP Address:</div><div className="value">{invoicesWithGST.ip}</div></div> */}
+                        <div className="profile-row"><div className="label">Email:</div><div className="value">{invoicesWithGST?.userId?.email}</div></div>
+                        <div className="profile-row"><div className="label">Status:</div><div className="value">{invoicesWithGST?.userId?.status}</div></div>
+
                     </div>
                 </div>
 
-                <div className="card referrals-card">
+                {/* <div className="card referrals-card">
                     <div className="card-header green">
                         <h3>Referrals {referralEmails?.length}</h3>
                     </div>
@@ -112,7 +118,7 @@ const ViewBiling = () => {
                         </ul>
 
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

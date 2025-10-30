@@ -256,7 +256,7 @@ const CustomerTable = () => {
                                 </td>
 
                                 <td className="text-start">
-                           
+
                                   <Link
                                     to={`/${user.userId.name}/invoice/${user?._id}`}
                                   >
@@ -269,7 +269,7 @@ const CustomerTable = () => {
                                     </button>
                                   </Link>
                                 </td>
-                                
+
                               </tr>
                             );
                           })

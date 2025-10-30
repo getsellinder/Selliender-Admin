@@ -158,6 +158,7 @@ import Orders from "./views/order/Order";
 import Order from "./views/order/Order";
 import ViewBiling from "./views/billing/BilingView";
 import BilingInvoice from "./views/billing/BilingInvoice";
+import UsersList from "./views/user/UsersList";
 
 
 
@@ -362,7 +363,7 @@ const routes = [
   {
     path: "/customers-details",
     name: "Customers",
-    element: CustomerTable,
+    element: UsersList,
     navName: "Customers",
   },
   {

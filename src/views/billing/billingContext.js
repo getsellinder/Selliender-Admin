@@ -11,6 +11,7 @@ const BillingContext = createContext()
 export const BillingProvider = ({ children }) => {
     const [billingInvoice, setBillingInvoice] = useState([])
     const [loading, setLoading] = useState(null)
+    const [data, setData] = useState("Hello this buillding workingg")
 
 
     const token = isAutheticated();
@@ -32,10 +33,10 @@ export const BillingProvider = ({ children }) => {
         }
     };
 
-    console.log("billingInvoice00000000000000", billingInvoice)
+
 
     return (
-        <BillingContext.Provider value={{ billingInvoice, getBilingInvoice }}>
+        <BillingContext.Provider value={{ billingInvoice, getBilingInvoice, data }}>
             {children}
         </BillingContext.Provider>
     )
