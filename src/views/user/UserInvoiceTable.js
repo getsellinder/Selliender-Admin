@@ -6,10 +6,8 @@ import { isAutheticated } from "src/auth";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
 
-
-
 const UserInvoiceTable = () => {
-    const { name, id } = useParams()
+    const { name, id } = useParams();
     const token = isAutheticated();
     const [search, setSearch] = useState();
     const { appdetails } = useCustomer();
@@ -36,16 +34,16 @@ const UserInvoiceTable = () => {
         "STATUS",
         "INVOICE",
     ];
-    const getOrders = async (
+    const getInvoices = async (
         searchName = search,
         page = 1,
         limit = itemPerPage
     ) => {
         try {
             setLoading(true);
-            const params = { limit, page }
+            const params = { limit, page };
             if (searchName && searchName.trim() !== "") {
-                params.name = searchName.trim()
+                params.name = searchName.trim();
             }
 
             const res = await axios.get(`/api/package/all/invoice/${id}`, {
@@ -57,7 +55,6 @@ const UserInvoiceTable = () => {
             setTotalPages(res.data.totalPages);
             // setCurrentPage(res.data.currentPage);
             setItemPerPage(limit);
-
         } catch (error) {
             const msg = error.response?.data?.message || "Internal Server Error";
             setErrorMessage(msg);
@@ -67,9 +64,8 @@ const UserInvoiceTable = () => {
     };
 
     useEffect(() => {
-        getOrders(search, currentPage, itemPerPage);
+        getInvoices(search, currentPage, itemPerPage);
     }, [search, currentPage, itemPerPage]); // ✅ add dependencies
-
 
     const handlePrev = () => {
         if (currentPage > 1) setCurrentPage((prev) => prev - 1);
@@ -77,7 +73,7 @@ const UserInvoiceTable = () => {
     const handleNext = () => {
         if (currentPage < totalpages) setCurrentPage((prev) => prev + 1);
     };
-    console.log("order invoice table", order)
+    console.log("order invoice table", order);
 
     return (
         <div className="orders-page">
@@ -89,7 +85,6 @@ const UserInvoiceTable = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-
             </div>
 
             <div className="orders-table-card">
@@ -111,12 +106,16 @@ const UserInvoiceTable = () => {
                             <tr>
                                 <td colSpan="9" className="text-center py-10">
                                     <div className="flex justify-center items-center">
-                                        <CircularProgress size={50}
+                                        <CircularProgress
+                                            size={50}
                                             thickness={5}
-                                            style={{ color: "#1976d2" }} />
+                                            style={{ color: "#1976d2" }}
+                                        />
                                     </div>
                                 </td>
                             </tr>
+                        ) : errormsge ? (
+                            <tr><td colSpan={9} className="text-center py-3" style={{ fontWeight: "600", fontSize: "1rem" }}>{errormsge}</td></tr>
                         ) : (
                             order?.map((o, idx) => (
                                 <tr key={idx}>
@@ -133,18 +132,23 @@ const UserInvoiceTable = () => {
                                         </span>
                                     </td>
                                     <td>
-                                        <span className={`orders-pill  ${o.
-                                            invoice_status
-                                            === "status" ? "orders-pill-status-fail " : "orders-pill-status-success"}`}>
-
-                                            {o.
-                                                status
-                                            }
+                                        <span
+                                            className={`orders-pill  ${o.invoice_status === "status"
+                                                ? "orders-pill-status-fail "
+                                                : "orders-pill-status-success"
+                                                }`}
+                                        >
+                                            {o.status}
                                         </span>
                                     </td>
                                     <td>
-                                        <button className="orders-view-btn" onClick={() => navigate(`/${o.userId.name}/invoice/${o._id}`)}>
-                                            <span className="orders-view-icon" >📄</span> View
+                                        <button
+                                            className="orders-view-btn"
+                                            onClick={() =>
+                                                navigate(`/${o.userId.name}/invoice/${o._id}`)
+                                            }
+                                        >
+                                            <span className="orders-view-icon">📄</span> View
                                         </button>
                                     </td>
                                 </tr>
@@ -163,16 +167,20 @@ const UserInvoiceTable = () => {
                     </button>
 
                     {Array.from({ length: totalpages }, (_, i) => {
-                        const isActive = currentPage === i + 1
+                        const isActive = currentPage === i + 1;
                         return (
                             <button
                                 key={i + 1}
-                                className={isActive ? "orders-page-num-active" : "orders-page-num-inactive"}
+                                className={
+                                    isActive
+                                        ? "orders-page-num-active"
+                                        : "orders-page-num-inactive"
+                                }
                                 onClick={() => setCurrentPage(i + 1)}
                             >
                                 {i + 1}
                             </button>
-                        )
+                        );
                     })}
 
                     <button

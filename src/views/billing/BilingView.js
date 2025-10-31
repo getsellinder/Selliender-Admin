@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import './BilingView.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { isAutheticated } from 'src/auth';
-import { useBilling } from './billingContext';
-import { CircularProgress } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import "./BilingView.css";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { isAutheticated } from "src/auth";
+import { useBilling } from "./billingContext";
+import { CircularProgress } from "@mui/material";
 
 const ViewBiling = () => {
     const [billingInvoiceView, setBillingInvoiceView] = useState([]);
     const [loading, setLoading] = useState(null);
-    const { billingInvoice, data } = useBilling()
+    const [InvoiceError, setInvoiceError] = useState("");
+    const { billingInvoice, data } = useBilling();
     const { id } = useParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    console.log("ViewBiling....................", billingInvoice, data)
+    console.log("ViewBiling....................", billingInvoice, data);
 
     const token = isAutheticated();
 
@@ -28,8 +29,8 @@ const ViewBiling = () => {
             setBillingInvoiceView(res?.data);
         } catch (error) {
             const msg = error.response?.data?.message || "Internal Server Error";
-            toast.error(msg);
-            // setErrorMessage(msg);
+
+            setInvoiceError(msg);
         } finally {
             setLoading(null);
         }
@@ -38,41 +39,54 @@ const ViewBiling = () => {
         getBilingInvoiceView(id);
     }, [id]);
 
-    const invoicesWithGST = billingInvoiceView?.invoicesWithGST
+    const invoicesWithGST = billingInvoiceView?.invoicesWithGST;
     const referralEmails = billingInvoiceView?.viewReferral?.referralemail;
-    console.log("invoicesWithGST", invoicesWithGST)
-    console.log("referralEmails", billingInvoiceView.viewReferral)
-
+    console.log("invoicesWithGST", invoicesWithGST);
+    console.log("referralEmails", billingInvoiceView.viewReferral);
 
     const user = {
-        username: 'mani',
-        referralCode: 'X5PHAN',
-        planName: 'N/A',
-        planType: 'N/A',
-        trialStart: 'Sep 4, 2025, 05:37:43 PM',
-        trialEnd: 'Sep 14, 2025, 05:37:43 PM',
-        subscriptionStart: 'N/A',
-        subscriptionEnd: 'N/A',
-        joiningDate: 'Sep 4, 2025, 05:37:43 PM',
-        status: 'Active',
-        keywords: 'No Keywords',
-        mobile: 'N/A',
-        ip: '152.59.201.35'
+        username: "mani",
+        referralCode: "X5PHAN",
+        planName: "N/A",
+        planType: "N/A",
+        trialStart: "Sep 4, 2025, 05:37:43 PM",
+        trialEnd: "Sep 14, 2025, 05:37:43 PM",
+        subscriptionStart: "N/A",
+        subscriptionEnd: "N/A",
+        joiningDate: "Sep 4, 2025, 05:37:43 PM",
+        status: "Active",
+        keywords: "No Keywords",
+        mobile: "N/A",
+        ip: "152.59.201.35",
     };
 
-    console.log("billingInvoiceView", billingInvoiceView)
+    console.log("billingInvoiceView", billingInvoiceView);
     const referrals = [
-        { name: 'Alice Brown', date: '2024-02-01' },
-        { name: 'Bob Wilson', date: '2024-02-15' },
-        { name: 'Carol Davis', date: '2024-03-01' },
-        { name: 'David Miller', date: '2024-03-10' }
+        { name: "Alice Brown", date: "2024-02-01" },
+        { name: "Bob Wilson", date: "2024-02-15" },
+        { name: "Carol Davis", date: "2024-03-01" },
+        { name: "David Miller", date: "2024-03-10" },
     ];
 
     return (
         <div className="userpage-container">
             <div className="userpage-actions">
-                <button className="btn btn-outline" onClick={() => navigate("/customers-details")}>Go to All Users</button>
-                <button className="btn btn-primary" onClick={() => navigate(`/${invoicesWithGST?.userId?.name}/invoices/${invoicesWithGST?.userId?._id}`)}>User Invoices</button>
+                <button
+                    className="btn btn-outline"
+                    onClick={() => navigate("/customers-details")}
+                >
+                    Go to All Users
+                </button>
+                <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                        navigate(
+                            `/${invoicesWithGST?.userId?.name}/invoices/${invoicesWithGST?.userId?._id}`
+                        )
+                    }
+                >
+                    User Invoices
+                </button>
             </div>
 
             <div className="userpage-grid">
@@ -80,21 +94,52 @@ const ViewBiling = () => {
                     <div className="card-header dark">
                         <h3>User Profile</h3>
                     </div>
-                    {loading ? <div className='text-center py-5'><CircularProgress /></div> :
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <CircularProgress />
+                        </div>
+                    ) : InvoiceError ? (
+                        <span>{InvoiceError}</span>
+                    ) : (
                         <div className="card-body profile-body">
-                            <div className="profile-row"><div className="label">User Name:</div><div className="value">{invoicesWithGST?.userId?.name}</div></div>
+                            <div className="profile-row">
+                                <div className="label">User Name:</div>
+                                <div className="value">{invoicesWithGST?.userId?.name}</div>
+                            </div>
 
-                            <div className="profile-row"><div className="label">Plan Name:</div><div className="value">{invoicesWithGST?.PlanId?.name}</div></div>
-                            <div className="profile-row"><div className="label">Plan Type:</div><div className="value">{invoicesWithGST?.PlanId?.Package}</div></div>
+                            <div className="profile-row">
+                                <div className="label">Plan Name:</div>
+                                <div className="value">{invoicesWithGST?.PlanId?.name}</div>
+                            </div>
+                            <div className="profile-row">
+                                <div className="label">Plan Type:</div>
+                                <div className="value">{invoicesWithGST?.PlanId?.Package}</div>
+                            </div>
 
-                            <div className="profile-row"><div className="label">Current Subscription Start Date:</div><div className="value">{invoicesWithGST?.plan_start_date}</div></div>
-                            <div className="profile-row"><div className="label">Current Subscription End Date:</div><div className="value">{invoicesWithGST?.plan_expiry_date}</div></div>
-                            <div className="profile-row"><div className="label">Joining Date:</div><div className="value">{invoicesWithGST?.userId?.createdAt}</div></div>
-                            <div className="profile-row"><div className="label">Email:</div><div className="value">{invoicesWithGST?.userId?.email}</div></div>
-                            <div className="profile-row"><div className="label">Status:</div><div className="value">{invoicesWithGST?.userId?.status}</div></div>
-
-                        </div>}
-
+                            <div className="profile-row">
+                                <div className="label">Current Subscription Start Date:</div>
+                                <div className="value">{invoicesWithGST?.plan_start_date}</div>
+                            </div>
+                            <div className="profile-row">
+                                <div className="label">Current Subscription End Date:</div>
+                                <div className="value">{invoicesWithGST?.plan_expiry_date}</div>
+                            </div>
+                            <div className="profile-row">
+                                <div className="label">Joining Date:</div>
+                                <div className="value">
+                                    {invoicesWithGST?.userId?.createdAt}
+                                </div>
+                            </div>
+                            <div className="profile-row">
+                                <div className="label">Email:</div>
+                                <div className="value">{invoicesWithGST?.userId?.email}</div>
+                            </div>
+                            <div className="profile-row">
+                                <div className="label">Status:</div>
+                                <div className="value">{invoicesWithGST?.userId?.status}</div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* <div className="card referrals-card">

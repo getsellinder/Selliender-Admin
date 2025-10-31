@@ -63,7 +63,6 @@ const Invoice = () => {
         </div>
       ) : (
         <Paper
-
           elevation={4}
           sx={{
             p: 0,
@@ -354,12 +353,54 @@ const Invoice = () => {
                 </Box>
               </Box>
             </Box>
+            <Box
+              sx={{
+                mt: 4,
+                p: 2,
+                border: "1px solid #e5e7eb",
+                borderRadius: "8px",
+                backgroundColor: "#fafafa",
+              }}
+            >
+              {[
+                { label: "Transaction ID", value: invoice.TransactionId },
+                {
+                  label: "Razorpay Signature",
+                  value: invoice.RazorpaySignature,
+                },
+                { label: "Razorpay Order ID", value: invoice.RazorpayOrderId },
+              ].map((item, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    borderBottom: idx !== 2 ? "1px solid #e5e7eb" : "none",
+                    py: 1.2,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 500,
+                      color: "#6b7280" /* gray-500 */,
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
 
-            {/* Footer notes */}
-            <Box sx={{ mt: 4 }}>
-              <Typography variant="h6" sx={{ color: "#1976d2", mt: 2 }}>
-                Thank you for your business!
-              </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 500,
+                      color: "#111827" /* gray-900 */,
+                      textAlign: "right",
+                    }}
+                  >
+                    {item.value}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Box>
         </Paper>

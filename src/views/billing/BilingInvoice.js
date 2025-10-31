@@ -29,6 +29,7 @@ const sample = {
 const BilingInvoice = () => {
     const [billingInvoice, setBillingInvoice] = useState([]);
     const [loading, setLoading] = useState(null);
+    const [InvoiceError, setInvoiceError] = useState("")
     const { id } = useParams();
 
     const token = isAutheticated();
@@ -43,8 +44,8 @@ const BilingInvoice = () => {
             setBillingInvoice(res?.data);
         } catch (error) {
             const msg = error.response?.data?.message || "Internal Server Error";
-            toast.error(msg);
-            // setErrorMessage(msg);
+            setInvoiceError(msg)
+
         } finally {
             setLoading(null);
         }
@@ -66,7 +67,7 @@ const BilingInvoice = () => {
                 >
                     <CircularProgress style={{ fontSize: "25rem" }} />
                 </div>
-            ) : billingInvoice.length === 0 ? (
+            ) : InvoiceError ? <span>{InvoiceError}</span> : billingInvoice.length === 0 ? (
                 <div
                     className="card"
                     style={{
