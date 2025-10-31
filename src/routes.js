@@ -160,10 +160,12 @@ import ViewBiling from "./views/billing/BilingView";
 import BilingInvoice from "./views/billing/BilingInvoice";
 import UsersList from "./views/user/UsersList";
 import UserInvoiceTable from "./views/user/UserInvoiceTable";
+import { useLocation } from "react-router-dom";
 
 
 
 const GoogleAuthWrapper = () => {
+
   return (
     <GoogleOAuthProvider clientId="706958433155-ohqku868vmbpchhk54gcm4vi9b3433mf.apps.googleusercontent.com">
       <GoogleAuth></GoogleAuth>
@@ -173,6 +175,15 @@ const GoogleAuthWrapper = () => {
 // import Patient from "./views/Patients/Patient";
 // import ViewPatient from "./views/Patients/ViewPatient";
 // import ViewPatientTest from "./views/Patients/Test/ViewPatientTest";
+
+
+const pathname = window.location.pathname
+
+
+let dynamicName = "";
+if (pathname.includes("/view/")) dynamicName = "Billing";
+else if (pathname.includes("/invoice/")) dynamicName = "customers-details";
+
 const routes = [
   // { path: "/", exact: true, name: "Home", navName: "" },
   //dashboard
@@ -722,14 +733,14 @@ const routes = [
     navName: "Website Related",
   },
   {
-    path: "/Billing/view/:id",
-    name: "Billing",
+    path: "/view/:id",
+    name: "",
     element: ViewBiling,
     navName: "Website Related",
   },
   {
-    path: "/Billing/invoice/:id",
-    name: "Billing",
+    path: "/invoice/:id",
+    name: "",
     element: BilingInvoice,
     navName: "Website Related",
   },

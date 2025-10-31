@@ -8,7 +8,7 @@ export const AppSidebarNav = ({ items }) => {
   const location = useLocation();
   const navLink = (name, icon, badge) => {
     return (
-      <div className="d-flex" style={{margin:"-7px 0px"}}>
+      <div className="d-flex" style={{ margin: "-7px 0px" }}>
         {icon && icon}
         {name && name}
         {badge && (
@@ -26,12 +26,12 @@ export const AppSidebarNav = ({ items }) => {
     return (
       <>
         <Component
-        // className="bg-info"
+          // className="bg-info"
           {...(rest.to &&
             !rest.items && {
-              component: NavLink,
-              activeclassname: "active",
-            })}
+            component: NavLink,
+            activeclassname: "active",
+          })}
           key={index}
           {...rest}
         >

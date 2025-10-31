@@ -1,7 +1,6 @@
 import React from "react";
 import CIcon from "@coreui/icons-react";
-import { TbDeviceIpadMinus } from "react-icons/tb";
-import { FiLinkedin } from "react-icons/fi";
+
 import { cibLinkedin } from "@coreui/icons";
 import { cilBriefcase } from "@coreui/icons";
 
@@ -67,6 +66,7 @@ import {
 
 
 } from "@coreui/icons";
+
 import {
   CListGroup,
 
@@ -115,13 +115,6 @@ const _nav = [
     to: "/Pricing-Plans",
     group: "Plans",
   },
-
-
-
-
-
-
-
 
 
   {

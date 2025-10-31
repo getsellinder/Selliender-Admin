@@ -74,7 +74,7 @@ const Billing = () => {
 
     const summaryData = [
         { title: "Total Sales", value: `${biling?.totalsales}`, color: "#27ae60" },
-        // { title: "Total Due Amount", value: "Rs. 8300.00", color: "#e74c3c" },
+
         {
             title: "Total Received Amount",
             value: `₹${biling?.totalAmount}`,
@@ -183,7 +183,7 @@ const Billing = () => {
                                                     <button
                                                         className="orders-view-btn p-2"
                                                         onClick={() =>
-                                                            navigate(`/Billing/view/${r.userId._id}`)
+                                                            navigate(`/view/${r.userId._id}`)
                                                         }
                                                     >
                                                         View
@@ -193,7 +193,7 @@ const Billing = () => {
                                                             className="orders-view-btn p-2"
                                                             onClick={() =>
 
-                                                                navigate(`/Billing/invoice/${r.userId._id}`)
+                                                                navigate(`/invoice/${r.userId._id}`)
                                                             }
                                                         >
                                                             Invoice

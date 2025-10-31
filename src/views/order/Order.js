@@ -67,7 +67,7 @@ const Order = () => {
 
   useEffect(() => {
     getOrders(search, currentPage, itemPerPage);
-  }, [search, currentPage, itemPerPage]); // ✅ add dependencies
+  }, [search, currentPage, itemPerPage]);
   let fetchOrders = order?.data;
 
   const handlePrev = () => {
@@ -137,7 +137,7 @@ const Order = () => {
                     </span>
                   </td>
                   <td>
-                    <button className="orders-view-btn" onClick={() => navigate(`/${o.userId.name}/invoice/${o.userId._id}`)}>
+                    <button className="orders-view-btn" onClick={() => navigate(`/${o.userId.name}/invoices/${o.userId._id}`)}>
                       <span className="orders-view-icon" >📄</span> View
                     </button>
                   </td>

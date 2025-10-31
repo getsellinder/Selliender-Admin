@@ -226,7 +226,7 @@ const UsersList = () => {
                                 <td>{user?.status}</td>
                                 <td className="actions">
                                     <button className="btn-action"
-                                        onClick={() => navigate(`/Billing/view/${user?._id}`)}>View</button>
+                                        onClick={() => navigate(`/view/${user?._id}`)}>View</button>
 
                                     <button className="btn-action outline"
                                         onClick={() => navigate(`/${user?.name}/invoices/${user?._id}`)}>Invoices</button>
