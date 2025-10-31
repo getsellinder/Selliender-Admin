@@ -179,12 +179,6 @@ const Order = () => {
         </div>
       </div>
 
-      {/* <footer className="orders-footer">
-        Copyright © 2023-2024{" "}
-        <a href="https://neonflake.com" target="_blank" rel="noreferrer">
-          Neonflake Enterprises OPC Pvt Ltd
-        </a>
-      </footer> */}
       <footer className="orders-footer">
         {appdetails.map((val, index) => {
           return (

@@ -21,12 +21,18 @@ import { LinkedinProvider } from "./views/Linkiedin/LinkedenContext";
 import { LeedsProvider } from "./views/Leeds/LeedsContext";
 import { BillingProvider } from "./views/billing/billingContext";
 
+const api = process.env.REACT_APP_BACKEND_URL
+if (!api) {
+  console.log("no backend api in env", api);
+
+}
 const setupAxios = () => {
   // axios.defaults.baseURL = "http://localhost:5000";
 
   // latest App deploy
-  axios.defaults.baseURL = " https://selliender-api.onrender.com";
+  // axios.defaults.baseURL = " https://selliender-api.onrender.com";
   // axios.defaults.baseURL = "https://api.sellinder.com"
+  axios.defaults.baseURL = api
 
   // axios.defaults.baseURL = "https://frameji-api.onrender.com";
 

@@ -72,7 +72,7 @@ const ViewBiling = () => {
         <div className="userpage-container">
             <div className="userpage-actions">
                 <button className="btn btn-outline" onClick={() => navigate("/customers-details")}>Go to All Users</button>
-                <button className="btn btn-primary" onClick={() => navigate(`/${invoicesWithGST?.userId?.name}/invoice/${invoicesWithGST?.userId?._id}`)}>User Invoices</button>
+                <button className="btn btn-primary" onClick={() => navigate(`/${invoicesWithGST?.userId?.name}/invoices/${invoicesWithGST?.userId?._id}`)}>User Invoices</button>
             </div>
 
             <div className="userpage-grid">
@@ -89,7 +89,7 @@ const ViewBiling = () => {
 
                             <div className="profile-row"><div className="label">Current Subscription Start Date:</div><div className="value">{invoicesWithGST?.plan_start_date}</div></div>
                             <div className="profile-row"><div className="label">Current Subscription End Date:</div><div className="value">{invoicesWithGST?.plan_expiry_date}</div></div>
-                            <div className="profile-row"><div className="label">Joining Date:</div><div className="value">{invoicesWithGST?.createdAt}</div></div>
+                            <div className="profile-row"><div className="label">Joining Date:</div><div className="value">{invoicesWithGST?.userId?.createdAt}</div></div>
                             <div className="profile-row"><div className="label">Email:</div><div className="value">{invoicesWithGST?.userId?.email}</div></div>
                             <div className="profile-row"><div className="label">Status:</div><div className="value">{invoicesWithGST?.userId?.status}</div></div>
 

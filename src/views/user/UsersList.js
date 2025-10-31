@@ -92,7 +92,7 @@ const UsersList = () => {
     const [showData, setShowData] = useState([]);
 
     const [name, setName] = useState("");
-    const limit = 10;
+    const limit = 4;
     const getUsers = async (searchName = name, page = currentPage) => {
         try {
             setLoading(true)
@@ -229,7 +229,7 @@ const UsersList = () => {
                                         onClick={() => navigate(`/Billing/view/${user?._id}`)}>View</button>
 
                                     <button className="btn-action outline"
-                                        onClick={() => navigate(`/Billing/invoice/${user?._id}`)}>Invoices</button>
+                                        onClick={() => navigate(`/${user?.name}/invoices/${user?._id}`)}>Invoices</button>
                                     <button
                                         onClick={() => handleToggle(user?._id)}
                                         className={`btn-action-toggle outline cursor-pointer ${user?.status === "Active" ? "bg-red" : "bg-green"

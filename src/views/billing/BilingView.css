@@ -47,7 +47,7 @@
 .card-header.green { background: #0e9a63; color: #fff; }
 .card-body { padding: 18px 20px; }
 .profile-body { display:flex; flex-direction: column; gap: 8px; }
-.profile-row { display:flex; padding: 12px 0; border-bottom: 1px solid rgba(36,41,61,0.06); }
+.profile-row { display:flex; padding: 6px 0; border-bottom: 1px solid rgba(36,41,61,0.06); }
 .profile-row .label { width: 240px; color: #6b7280; }
 .profile-row .value { color: #111827; }
 .referrals-body ul { list-style: none; margin: 0; padding: 8px 0; }
