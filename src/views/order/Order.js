@@ -76,6 +76,7 @@ const Order = () => {
   const handleNext = () => {
     if (currentPage < totalpages) setCurrentPage((prev) => prev + 1);
   };
+  console.log("fetchOrders", fetchOrders)
 
   return (
     <div className="orders-page">
@@ -116,33 +117,36 @@ const Order = () => {
                 </td>
               </tr>
             ) : (
-              fetchOrders?.map((o, idx) => (
-                <tr key={idx}>
-                  <td>{idx + 1}</td>
-                  <td>{o.userId.name}</td>
+              fetchOrders?.map((o, idx) => {
+                console.log("00", o)
+                return (
+                  <tr key={idx}>
+                    <td>{idx + 1}</td>
+                    <td>{o.userId.name}</td>
 
-                  <td>{o.Amount === "0" ? 0 : `₹${o.Amount}`}</td>
-                  <td>{o.plan_start_date}</td>
-                  <td>{o.plan_expiry_date}</td>
-                  <td>{o.PlanId.Package}</td>
-                  <td>
-                    <span className={`orders-pill orders-pill-type`}>
-                      {o.duration}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`orders-pill  ${o.status === "failed" ? "orders-pill-status-fail " : "orders-pill-status-success"}`}>
+                    <td>{o.Amount === "0" ? 0 : `₹${o.Amount}`}</td>
+                    <td>{o.plan_start_date}</td>
+                    <td>{o.plan_expiry_date}</td>
+                    <td>{o.PlanId.Package}</td>
+                    <td>
+                      <span className={`orders-pill orders-pill-type`}>
+                        {o.duration}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`orders-pill  ${o.status === "failed" ? "orders-pill-status-fail " : "orders-pill-status-success"}`}>
 
-                      {o.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="orders-view-btn" onClick={() => navigate(`/${o.userId.name}/invoices/${o.userId._id}`)}>
-                      <span className="orders-view-icon" >📄</span> View
-                    </button>
-                  </td>
-                </tr>
-              ))
+                        {o.status}
+                      </span>
+                    </td>
+                    <td>
+                      <button className="orders-view-btn" onClick={() => navigate(`/${o.userId.name}/invoices/${o.userId._id}`)}>
+                        <span className="orders-view-icon" >📄</span> View
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })
             )}
           </tbody>
         </table>
