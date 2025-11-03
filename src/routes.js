@@ -1,8 +1,10 @@
 import React from "react";
 
+
 //  DashBoard
 const Change_Password = React.lazy(() =>
   import("./views/pages/register/Change_password")
+
 );
 
 
@@ -17,6 +19,7 @@ import Address from "./views/configuration/Address.js";
 import Logo from "./views/configuration/Logo.js";
 import Login from "./views/pages/login/Login";
 import Web_Images from "./views/configuration/Web_Images";
+
 
 // Appointments
 

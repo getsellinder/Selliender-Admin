@@ -147,7 +147,7 @@ const _nav = [
 
   {
     component: CNavItem,
-    name: "Leeds",
+    name: "Leads",
     icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
     to: "/leeds",
     group: "Customer Service",

@@ -388,6 +388,7 @@ const Invoice = () => {
                 value: invoice.RazorpaySignature,
               },
               { label: "Razorpay Order ID", value: invoice.RazorpayOrderId },
+              { label: "Razorpay Order Time", value: invoice?.razorypayTime },
             ].map((item, idx) => (
               <Box
                 key={idx}

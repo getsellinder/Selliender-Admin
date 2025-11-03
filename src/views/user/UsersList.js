@@ -6,12 +6,7 @@ import { isAutheticated } from "src/auth";
 import { CircularProgress } from "@material-ui/core";
 import toast from "react-hot-toast";
 
-
-
-
 const UsersList = () => {
-
-
     const tableheading = [
         "ID",
         "NAME",
@@ -22,21 +17,16 @@ const UsersList = () => {
         "STATUS",
 
         "ACTION",
-
     ];
-
-
 
     const token = isAutheticated();
 
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [toggleLoading, setToggleLoading] = useState(null);
-    const [btnStatus, setBtnStatus] = useState("")
-
+    const [btnStatus, setBtnStatus] = useState("");
 
     const [success, setSuccess] = useState(true);
-
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemPerPage, setItemPerPage] = useState();
@@ -45,9 +35,13 @@ const UsersList = () => {
 
     const [name, setName] = useState("");
     const limit = 4;
-    const getUsers = async (searchName = name, page = currentPage, status = btnStatus) => {
+    const getUsers = async (
+        searchName = name,
+        page = currentPage,
+        status = btnStatus
+    ) => {
         try {
-            setLoading(true)
+            setLoading(true);
             let resp = await axios.get(`/api/customer/customers`, {
                 params: {
                     limit,
@@ -58,24 +52,22 @@ const UsersList = () => {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            })
+            });
             setShowData(resp?.data);
             setTotalPages(resp?.data?.totalPages);
-
         } catch (error) {
-            let res = error.response.data.message
-            console.log("error", error)
-
+            let res = error.response.data.message;
+            console.log("error", error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
     const handlePrev = () => {
-        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     };
 
     const handleNext = () => {
-        if (currentPage < totalpages) setCurrentPage(prev => prev + 1);
+        if (currentPage < totalpages) setCurrentPage((prev) => prev + 1);
     };
 
     useEffect(() => {
@@ -85,24 +77,26 @@ const UsersList = () => {
     const handleToggle = async (id) => {
         try {
             setToggleLoading(true);
-            const response = await axios.put(`/api/customer/status/${id}`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.put(
+                `/api/customer/status/${id}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             let msg = response.data.message;
-            await getUsers()
+            await getUsers();
             toast.success(msg);
         } catch (error) {
-            console.log("error in handleToggle", error)
+            console.log("error in handleToggle", error);
             let msg = error.data.response.message;
             toast.error(msg || "Internal Server Error");
         } finally {
             setToggleLoading(false);
         }
     };
-
-
 
     return (
         <div className="users-page">
@@ -111,32 +105,38 @@ const UsersList = () => {
                     <div className="stat-icon">📈</div>
                     <div className="stat-body">
                         <div className="stat-title">Total Users</div>
-                        <div className="stat-value">{loading ? <CircularProgress /> : showData?.totalUsers}</div>
+                        <div className="stat-value">
+                            {loading ? <CircularProgress /> : showData?.totalUsers}
+                        </div>
                     </div>
                 </div>
                 <div className="stat-card green">
                     <div className="stat-icon">👤</div>
                     <div className="stat-body">
                         <div className="stat-title">Active Users</div>
-                        <div className="stat-value">{loading ? <CircularProgress /> : showData?.activeUsers}</div>
+                        <div className="stat-value">
+                            {loading ? <CircularProgress /> : showData?.activeUsers}
+                        </div>
                     </div>
                 </div>
                 <div className="stat-card pink">
                     <div className="stat-icon">👁️</div>
                     <div className="stat-body">
                         <div className="stat-title">Suspended Users</div>
-                        <div className="stat-value">{loading ? <CircularProgress /> : showData?.InactiveUsers}</div>
+                        <div className="stat-value">
+                            {loading ? <CircularProgress /> : showData?.InactiveUsers}
+                        </div>
                     </div>
                 </div>
-
-
             </div>
             <div className="status_button_div">
                 <div>
                     <button onClick={() => getUsers(name, 1, "Active")}>
-                        {loading ? "Loading..." : "Active"}
+                        {loading ? <CircularProgress size={25} /> : "Active"}
                     </button>
-                    <button onClick={() => getUsers(name, 1, "Inactive")}>InActive</button>
+                    <button onClick={() => getUsers(name, 1, "Inactive")}>
+                        {loading ? <CircularProgress size={25} /> : "InActive"}
+                    </button>
                 </div>
 
                 <div className="table-toolbar">
@@ -145,14 +145,11 @@ const UsersList = () => {
                         placeholder="Search users"
                         value={name}
                         onChange={(e) => {
-                            const value = e.target.value
-                            setName(value)
-
-
+                            const value = e.target.value;
+                            setName(value);
                         }}
                     />
                 </div>
-
             </div>
 
             <div className="users-table-wrap">
@@ -165,53 +162,65 @@ const UsersList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? <tr>
-                            <td colSpan="9" className="text-center py-10">
-                                <div className="flex justify-center items-center">
-                                    <CircularProgress
-                                        size={50}
-                                        thickness={5}
-                                        style={{ color: "#1976d2" }}
-                                    />
-                                </div>
-                            </td>
-                        </tr> : showData?.result?.map((user, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{user?.name}</td>
-                                <td>{user?.createdAt}</td>
-                                <td>
-                                    {user?.PlanId === null
-                                        ? "not_taken"
-                                        : user?.PlanId?.Package}
-                                </td>
-                                {/* <td className="text-center">{user?.email}</td> */}
-                                <td className="text-center">{user?.SearchLimit}</td>
-                                <td>{user?.status}</td>
-                                <td className="actions">
-                                    <button className="btn-action"
-                                        onClick={() => navigate(`/view/${user?._id}`)}>View</button>
-
-                                    <button className="btn-action outline"
-                                        onClick={() => navigate(`/${user?.name}/invoices/${user?._id}`)}>Invoices</button>
-                                    <button
-                                        onClick={() => handleToggle(user?._id)}
-                                        className={`btn-action-toggle outline cursor-pointer ${user?.status === "Active" ? "bg-red" : "bg-green"
-                                            } `}
-                                    >
-                                        {toggleLoading === user.id ? (
-                                            <CircularProgress size={25} />
-                                        ) : user?.status === "Active" ? (
-                                            "Suspend"
-                                        ) : (
-                                            "Activate"
-                                        )}
-                                    </button>
-
+                        {loading ? (
+                            <tr>
+                                <td colSpan="9" className="text-center py-10">
+                                    <div className="flex justify-center items-center">
+                                        <CircularProgress
+                                            size={50}
+                                            thickness={5}
+                                            style={{ color: "#1976d2" }}
+                                        />
+                                    </div>
                                 </td>
                             </tr>
-                        ))}
+                        ) : (
+                            showData?.result?.map((user, index) => (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{user?.name}</td>
+                                    <td>{user?.createdAt}</td>
+                                    <td>
+                                        {user?.PlanId === null
+                                            ? "not_taken"
+                                            : user?.PlanId?.Package}
+                                    </td>
+                                    {/* <td className="text-center">{user?.email}</td> */}
+                                    <td className="text-center">{user?.SearchLimit}</td>
+                                    <td>{user?.status}</td>
+                                    <td className="actions">
+                                        <button
+                                            className="btn-action"
+                                            onClick={() => navigate(`/view/${user?._id}`)}
+                                        >
+                                            View
+                                        </button>
 
+                                        <button
+                                            className="btn-action outline"
+                                            onClick={() =>
+                                                navigate(`/${user?.name}/invoices/${user?._id}`)
+                                            }
+                                        >
+                                            Invoices
+                                        </button>
+                                        <button
+                                            onClick={() => handleToggle(user?._id)}
+                                            className={`btn-action-toggle outline cursor-pointer ${user?.status === "Active" ? "bg-red" : "bg-green"
+                                                } `}
+                                        >
+                                            {toggleLoading === user.id ? (
+                                                <CircularProgress size={25} />
+                                            ) : user?.status === "Active" ? (
+                                                "Suspend"
+                                            ) : (
+                                                "Activate"
+                                            )}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>

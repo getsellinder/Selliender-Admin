@@ -25,13 +25,13 @@ const Leeds = () => {
 
   const {
     allLeeds,
-    
+
     packageLoading,
-   
+
     getAllLeeds,
   } = useLeeds();
   const leeds = allLeeds?.result;
-  console.log("leeds",leeds)
+  console.log("leeds", leeds)
 
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState();
@@ -56,11 +56,11 @@ const Leeds = () => {
   const tableheading = [
 
     "Customer",
-    "Email", 
-  "Message",
+    "Email",
+    "Message",
     "Status",
     "Created",
-];
+  ];
 
   return (
     <div className="main-content">
@@ -77,7 +77,7 @@ const Leeds = () => {
                      "
               >
                 <div style={{ fontSize: "22px" }} className="fw-bold">
-                  All Leeds
+                  All Leads
                 </div>
 
               </div>
@@ -199,9 +199,9 @@ const Leeds = () => {
                                 <td className="text-start">{user.name}</td>
 
                                 <td className="text-start">
-                                {user.email}
+                                  {user.email}
                                 </td>
-                       
+
                                 <td className="">{user.message}</td>
 
 
