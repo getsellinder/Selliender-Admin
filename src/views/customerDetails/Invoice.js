@@ -62,348 +62,366 @@ const Invoice = () => {
           />
         </div>
       ) : (
-        <Paper
-          elevation={4}
-          sx={{
-            p: 0,
-            borderRadius: 1,
-            backgroundColor: "#fff",
-            maxWidth: 900,
-            margin: "24px auto",
-            fontFamily: "Poppins, sans-serif",
-            overflow: "hidden",
-          }}
-        >
-          {/* Top header with blue blocks */}
-          <Grid container>
-            <Grid
-              item
-              xs={8}
-              sx={{
-                backgroundColor: "#dbeefb",
-                p: 3,
-                minHeight: 120,
-              }}
-            >
-              <div>
+        <div>
+          <Paper
+            elevation={4}
+            sx={{
+              p: 0,
+              borderRadius: 1,
+              backgroundColor: "#fff",
+              maxWidth: 900,
+              margin: "24px auto",
+              fontFamily: "Poppins, sans-serif",
+              overflow: "hidden",
+            }}
+          >
+            {/* Top header with blue blocks */}
+            <Grid container>
+              <Grid
+                item
+                xs={8}
+                sx={{
+                  backgroundColor: "#dbeefb",
+                  p: 3,
+                  minHeight: 120,
+                }}
+              >
+                <div>
+                  {appdetails.map((item, index) => {
+                    return (
+                      <>
+                        {item.logo.map((invoice) => (
+                          <img
+                            key={index}
+                            src={invoice.Footerlogo.url}
+                            style={{ height: "4rem" }}
+                          />
+                        ))}
+                      </>
+                    );
+                  })}
+                </div>
+
                 {appdetails.map((item, index) => {
                   return (
                     <>
-                      {item.logo.map((invoice) => (
-                        <img
-                          key={index}
-                          src={invoice.Footerlogo.url}
-                          style={{ height: "4rem" }}
-                        />
-                      ))}
+                      {item.address.map((invoice, index) => {
+                        return (
+                          <>
+                            <Typography
+                              variant="body1"
+                              fontWeight={600}
+                              color="text.secondary"
+                            >
+                              {invoice.company}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ mt: 1 }}
+                            >
+                              {invoice.address}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ mt: 1 }}
+                            >
+                              {invoice.city}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ mt: 1 }}
+                            >
+                              {invoice.state} {invoice.country}{" "}
+                              {invoice.pincode}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ mt: 1 }}
+                            >
+                              GST Number : {invoice?.gstNumber}
+                            </Typography>
+                          </>
+                        );
+                      })}
                     </>
                   );
                 })}
-              </div>
-
-              {appdetails.map((item, index) => {
-                return (
-                  <>
-                    {item.address.map((invoice, index) => {
-                      return (
-                        <>
-                          <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            color="text.secondary"
-                          >
-                            {invoice.company}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ mt: 1 }}
-                          >
-                            {invoice.address}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ mt: 1 }}
-                          >
-                            {invoice.city}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ mt: 1 }}
-                          >
-                            {invoice.state} {invoice.country} {invoice.pincode}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ mt: 1 }}
-                          >
-                            GST Number : {invoice?.gstNumber}
-                          </Typography>
-                        </>
-                      );
-                    })}
-                  </>
-                );
-              })}
-            </Grid>
-
-            <Grid
-              color="text.secondary"
-              item
-              xs={4}
-              sx={{
-                // backgroundColor: "#1f6fb2",
-                backgroundColor: "#dbeefb",
-                // color: "#fff",
-                p: 2,
-                textAlign: "right",
-              }}
-            >
-              <Typography variant="h4" fontWeight={700}>
-                Invoice
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                <div>
-                  <strong>Invoice </strong> {invoice?.InvoiceNo}
-                </div>
-                <div>
-                  <strong>Invoice Date</strong> {invoice?.createdAt}
-                </div>
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Box sx={{ p: 3 }}>
-            <Box component={Paper} elevation={0} sx={{ mt: 1, mb: 2 }}>
-              <Grid
-                container
-                sx={{ backgroundColor: "#dbeefb" }}
-                color="text.secondary"
-              >
-                <Grid item xs={8} sx={{ p: 1.5 }}>
-                  <strong>Plan</strong>
-                </Grid>
-
-                <Grid item xs={4} sx={{ p: 1.5, textAlign: "right" }}>
-                  <strong>Amount</strong>
-                </Grid>
               </Grid>
 
               <Grid
-                container
+                color="text.secondary"
+                item
+                xs={4}
                 sx={{
-                  backgroundColor: "#eef7fd",
-                  borderBottom: "1px solid transparent",
+                  // backgroundColor: "#1f6fb2",
+                  backgroundColor: "#dbeefb",
+                  // color: "#fff",
+                  p: 2,
+                  textAlign: "right",
                 }}
               >
-                <Grid item xs={8} sx={{ p: 1.25 }}>
-                  <Typography>
-                    {invoice ? invoice?.PlanId?.Package : "\u00A0"}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={4} sx={{ p: 1.25, textAlign: "right" }}>
-                  <Typography>
-                    ₹
-                    {invoice?.duration == "yearly"
-                      ? invoice?.PlanId?.Yearly_Price
-                      : invoice?.PlanId?.Monthly_Price}
-                  </Typography>
-                </Grid>
+                <Typography variant="h4" fontWeight={700}>
+                  Invoice
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  <div>
+                    <strong>Invoice </strong> {invoice?.InvoiceNo}
+                  </div>
+                  <div>
+                    <strong>Invoice Date</strong> {invoice?.createdAt}
+                  </div>
+                </Typography>
               </Grid>
+            </Grid>
 
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-              >
-                <Grid sx={{ display: "flex", flexDirection: "column" }}>
-                  <Box>
-                    <Grid
-                      item
-                      xs={3}
-                      sx={{
-                        p: 1.25,
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography
-                        color="text.secondary"
-                        sx={{ fontWeight: 600 }}
+            <Box sx={{ p: 3 }}>
+              <Box component={Paper} elevation={0} sx={{ mt: 1, mb: 2 }}>
+                <Grid
+                  container
+                  sx={{ backgroundColor: "#dbeefb" }}
+                  color="text.secondary"
+                >
+                  <Grid item xs={8} sx={{ p: 1.5 }}>
+                    <strong>Plan</strong>
+                  </Grid>
+
+                  <Grid item xs={4} sx={{ p: 1.5, textAlign: "right" }}>
+                    <strong>Amount</strong>
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  sx={{
+                    backgroundColor: "#eef7fd",
+                    borderBottom: "1px solid transparent",
+                  }}
+                >
+                  <Grid item xs={8} sx={{ p: 1.25 }}>
+                    <Typography>
+                      {invoice ? invoice?.PlanId?.Package : "\u00A0"}
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={4} sx={{ p: 1.25, textAlign: "right" }}>
+                    <Typography>
+                      ₹
+                      {invoice?.duration == "yearly"
+                        ? invoice?.PlanId?.Yearly_Price
+                        : invoice?.PlanId?.Monthly_Price}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mt: 2,
+                  }}
+                >
+                  <Grid sx={{ display: "flex", flexDirection: "column" }}>
+                    <Box>
+                      <Grid
+                        item
+                        xs={3}
+                        sx={{
+                          p: 1.25,
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
                       >
-                        {invoice ? invoice?.plan_start_date : "\u00A0"} To{" "}
-                        {invoice ? invoice?.plan_expiry_date : "\u00A0"}
-                      </Typography>
-                    </Grid>
-                  </Box>
-                  <Box sx={{ width: 320, p: 2, borderRadius: 2 }}>
-                    {/* <Typography
+                        <Typography
+                          color="text.secondary"
+                          sx={{ fontWeight: 600 }}
+                        >
+                          {invoice ? invoice?.plan_start_date : "\u00A0"} To{" "}
+                          {invoice ? invoice?.plan_expiry_date : "\u00A0"}
+                        </Typography>
+                      </Grid>
+                    </Box>
+                    <Box sx={{ width: 320, p: 2, borderRadius: 2 }}>
+                      {/* <Typography
                     color="text.secondary"
                     sx={{ fontWeight: 600, mb: 1 }}
                   >
                     Plan Features
                   </Typography> */}
 
-                    <Grid container sx={{ pt: 1 }}>
-                      {/* ✅ Bullet + Search Limit */}
+                      <Grid container sx={{ pt: 1 }}>
+                        {/* ✅ Bullet + Search Limit */}
+                        <Grid
+                          item
+                          xs={12}
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            mb: 1,
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 600,
+                              mr: 1,
+                              color: "#1f6fb2",
+                              minWidth: "20px",
+                            }}
+                          >
+                            •
+                          </Typography>
+
+                          <Typography sx={{ fontSize: "14px", color: "#333" }}>
+                            {invoice?.duration === "monthly"
+                              ? `${invoice?.PlanId?.SearchLimitMonthly} Profile Monthly`
+                              : `${invoice?.PlanId?.SearchLimitYearly} Profile Monthly`}
+                          </Typography>
+                        </Grid>
+
+                        {/* ✅ Bullet + Only the 2nd Feature */}
+                        {(invoice?.duration === "monthly"
+                          ? invoice?.PlanId?.Monthly_features
+                          : invoice?.PlanId?.Yearly_features
+                        )
+                          ?.slice(1, 2)
+                          .map((item, index) => (
+                            <Grid
+                              item
+                              xs={12}
+                              key={index}
+                              sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                mb: 1,
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontWeight: 600,
+                                  mr: 1,
+                                  color: "#1f6fb2",
+                                  minWidth: "20px",
+                                }}
+                              >
+                                •
+                              </Typography>
+
+                              <Typography
+                                sx={{ fontSize: "14px", color: "#333" }}
+                              >
+                                {item}
+                              </Typography>
+                            </Grid>
+                          ))}
+                      </Grid>
+                    </Box>
+                  </Grid>
+                  <Box sx={{ width: 320 }}>
+                    <Grid container sx={{ borderTop: "2px solid #1f6fb2" }}>
+                      <Grid item xs={8} sx={{ p: 1 }}>
+                        Subtotal
+                      </Grid>
+                      <Grid item xs={4} sx={{ p: 1, textAlign: "right" }}>
+                        ₹
+                        {invoice?.duration == "yearly"
+                          ? invoice?.PlanId?.Yearly_Price
+                          : invoice?.PlanId?.Monthly_Price}
+                      </Grid>
+                      <Grid item xs={8} sx={{ p: 1 }}>
+                        GST @ ₹{invoice?.GST}%
+                      </Grid>
+                      <Grid item xs={4} sx={{ p: 1, textAlign: "right" }}>
+                        ₹
+                        {invoice?.duration == "yearly"
+                          ? invoice?.PlanId?.gstYearlyPrice
+                          : invoice?.PlanId?.gstMonthlyPrice}
+                      </Grid>
+
                       <Grid
                         item
                         xs={12}
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          mb: 1,
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontWeight: 600,
-                            mr: 1,
-                            color: "#1f6fb2",
-                            minWidth: "20px",
-                          }}
-                        >
-                          •
-                        </Typography>
-
-                        <Typography sx={{ fontSize: "14px", color: "#333" }}>
-                          {invoice?.duration === "monthly"
-                            ? `${invoice?.PlanId?.SearchLimitMonthly} Profile Monthly`
-                            : `${invoice?.PlanId?.SearchLimitYearly} Profile Monthly`}
-                        </Typography>
+                        sx={{ borderTop: "1px solid #cfd8e3" }}
+                      />
+                      <Grid item xs={8} sx={{ p: 1, fontWeight: 700 }}>
+                        Total
                       </Grid>
-
-                      {/* ✅ Bullet + Only the 2nd Feature */}
-                      {(invoice?.duration === "monthly"
-                        ? invoice?.PlanId?.Monthly_features
-                        : invoice?.PlanId?.Yearly_features
-                      )
-                        ?.slice(1, 2)
-                        .map((item, index) => (
-                          <Grid
-                            item
-                            xs={12}
-                            key={index}
-                            sx={{
-                              display: "flex",
-                              alignItems: "flex-start",
-                              mb: 1,
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontWeight: 600,
-                                mr: 1,
-                                color: "#1f6fb2",
-                                minWidth: "20px",
-                              }}
-                            >
-                              •
-                            </Typography>
-
-                            <Typography
-                              sx={{ fontSize: "14px", color: "#333" }}
-                            >
-                              {item}
-                            </Typography>
-                          </Grid>
-                        ))}
+                      <Grid
+                        item
+                        xs={4}
+                        sx={{ p: 1, textAlign: "right", fontWeight: 700 }}
+                      >
+                        ₹{invoice?.Amount}
+                      </Grid>
                     </Grid>
                   </Box>
-                </Grid>
-                <Box sx={{ width: 320 }}>
-                  <Grid container sx={{ borderTop: "2px solid #1f6fb2" }}>
-                    <Grid item xs={8} sx={{ p: 1 }}>
-                      Subtotal
-                    </Grid>
-                    <Grid item xs={4} sx={{ p: 1, textAlign: "right" }}>
-                      ₹
-                      {invoice?.duration == "yearly"
-                        ? invoice?.PlanId?.Yearly_Price
-                        : invoice?.PlanId?.Monthly_Price}
-                    </Grid>
-                    <Grid item xs={8} sx={{ p: 1 }}>
-                      GST @ ₹{invoice?.GST}%
-                    </Grid>
-                    <Grid item xs={4} sx={{ p: 1, textAlign: "right" }}>
-                      ₹
-                      {invoice?.duration == "yearly"
-                        ? invoice?.PlanId?.gstYearlyPrice
-                        : invoice?.PlanId?.gstMonthlyPrice}
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{ borderTop: "1px solid #cfd8e3" }}
-                    />
-                    <Grid item xs={8} sx={{ p: 1, fontWeight: 700 }}>
-                      Total
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ p: 1, textAlign: "right", fontWeight: 700 }}
-                    >
-                      ₹{invoice?.Amount}
-                    </Grid>
-                  </Grid>
                 </Box>
               </Box>
             </Box>
-            <Box
-              sx={{
-                mt: 4,
-                p: 2,
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                backgroundColor: "#fafafa",
-              }}
-            >
-              {[
-                { label: "Transaction ID", value: invoice.TransactionId },
-                {
-                  label: "Razorpay Signature",
-                  value: invoice.RazorpaySignature,
-                },
-                { label: "Razorpay Order ID", value: invoice.RazorpayOrderId },
-              ].map((item, idx) => (
-                <Box
-                  key={idx}
+          </Paper>
+
+          <Paper
+            elevation={4}
+            sx={{
+              p: 3,
+              borderRadius: 1,
+              backgroundColor: "#fff",
+              maxWidth: 900,
+              margin: "24px auto",
+              fontFamily: "Poppins, sans-serif",
+              overflow: "hidden",
+            }}
+          >
+            <Typography sx={{
+              fontSize: "16px",
+              fontWeight: 600,
+              color: "#6b7280",
+              textAlign: "center"
+            }}>Razorpay Details</Typography>
+
+            {[
+              { label: "Transaction ID", value: invoice.TransactionId },
+              {
+                label: "Razorpay Signature",
+                value: invoice.RazorpaySignature,
+              },
+              { label: "Razorpay Order ID", value: invoice.RazorpayOrderId },
+            ].map((item, idx) => (
+              <Box
+                key={idx}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: idx !== 2 ? "1px solid #e5e7eb" : "none",
+                  py: 1.2,
+                }}
+              >
+                <Typography
                   sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    borderBottom: idx !== 2 ? "1px solid #e5e7eb" : "none",
-                    py: 1.2,
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: "#6b7280" /* gray-500 */,
                   }}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      color: "#6b7280" /* gray-500 */,
-                    }}
-                  >
-                    {item.label}
-                  </Typography>
+                  {item.label}
+                </Typography>
 
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      color: "#111827" /* gray-900 */,
-                      textAlign: "right",
-                    }}
-                  >
-                    {item.value}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        </Paper>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: "#111827" /* gray-900 */,
+                    textAlign: "right",
+                  }}
+                >
+                  {item.value}
+                </Typography>
+              </Box>
+            ))}
+          </Paper>
+        </div>
       )}
     </>
   );

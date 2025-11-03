@@ -32,3 +32,34 @@
   .cards-row { flex-direction: column }
   .table-toolbar { justify-content:flex-start }
 }
+
+.status_button_div{
+  display: flex;
+  justify-content: space-between;
+ align-items: center;
+  
+}
+
+.status_button_div div{
+  display: flex;
+  gap: 10px;
+}
+.status_button_div div button{
+  
+  padding: 10px;
+  border: none;
+  outline: none;
+  width: 80%;
+  border-radius: 10%;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.status_button_div div button:nth-child(1){
+  background-color: green;
+
+}
+.status_button_div div button:nth-child(2){
+  background-color: red;
+
+}

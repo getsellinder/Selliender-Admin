@@ -1,108 +1,68 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { CRow, CCol, CWidgetStatsA } from "@coreui/react";
 import { isAutheticated } from "src/auth";
 import axios from "axios";
+import { CircularProgress } from "@material-ui/core";
 
-const WidgetsDropdown = ({ genre = [] }) => {
+
+const WidgetsDropdown = () => {
   const token = isAutheticated();
+  const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Keep only the genre-related data
-  const [genres, setGenres] = useState([]);
-  const [subjects, setSubjects] = useState([]);
-  const [chapters, setChapters] = useState([]);
-  
-
-  const getAllGenre = async () => {
+  const getUsers = async () => {
     try {
-      let res = await axios.get(`/api/genre/getAllGenres`, {
+      setLoading(true);
+      const resp = await axios.get("/api/customer/dashboard/status", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       });
-      console.log("genres", res.data);
-      setGenres(res?.data?.genres || []);
+      console.log("resp?.data", resp?.data)
+      setUser(resp?.data);
     } catch (error) {
-      console.error("Error fetching genres:", error);
-      // setGenres([]);
-    }
-  };
-
-  const getAllSubjects = async ()=>{
-    try {
-      let res = await axios.get(`/api/subject/getSubjects`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("subjects", res.data);
-      setSubjects(res?.data?.subjects || []);
-    } catch (error) {
-      console.error("Error fetching genres:", error);
-      setGenres([]);
-    }
-  };
-
-  const getAllChaptersbyUser = async ()=>{
-    try {
-      let res = await axios.get(`/api/chapter/getAll/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("chapters", res.data);
-      setChapters(res?.data?.chapter || []);
-    } catch (error) {
-      console.error("Error fetching genres:", error);
-      setChapters([]);
+      let msg = error?.response?.data?.message;
+      console.log("error.getUsers", error);
+      console.log("error.getUsers.message", msg);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!genres.length && token) {
-      getAllGenre();
-    }
-    if (!subjects.length && token) {
-      getAllSubjects();
-    }
-    if(!chapters.length && token) {
-      getAllChaptersbyUser();
-    }
-  }, [ ]);
-  console.log("genres.WidgetsDropdown",genres)
+    getUsers();
+  }, []);
+  console.log("user", user)
 
   return (
     <>
-      <h4>Genre & Subjects</h4>
+      <h4>Users</h4>
       <CRow>
         <CCol sm={6} lg={3}>
           <CWidgetStatsA
             className="mb-4"
             color="primary"
-            value={<>{genres.length}</>}
-            title="Total Genres"
+            value={<>{loading ? <CircularProgress size={25} /> : user?.totalUsers}</>}
+            title="Total Users"
           />
         </CCol>
         <CCol sm={6} lg={3}>
           <CWidgetStatsA
             className="mb-4"
-            color="primary"
-            value={<>{subjects.length}</>}
-            title="Total Subjects"
+            color="success"
+            value={<>{loading ? <CircularProgress size={25} /> : user?.activeUser}</>}
+            title="Total Active Users"
           />
         </CCol>
       </CRow>
 
-      <h4>Chapters</h4>
       <CRow>
         <CCol sm={6} lg={3}>
           <CWidgetStatsA
             className="mb-4"
-            color="primary"
-            value={<>{chapters.length}</>}
-            title="Total Chapters"
+            color="danger"
+            value={<>{loading ? <CircularProgress size={25} /> : user?.inactiveUser}</>}
+            title="Total InActive Users"
           />
         </CCol>
       </CRow>

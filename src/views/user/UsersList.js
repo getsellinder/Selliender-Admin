@@ -5,58 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { isAutheticated } from "src/auth";
 import { CircularProgress } from "@material-ui/core";
 import toast from "react-hot-toast";
-import { useBilling } from "../billing/billingContext";
 
-const sampleUsers = [
-    {
-        id: 1,
-        name: "mani",
-        joined: "Sep 4, 2025, 05:37:43 PM",
-        package: "N/A",
-        keywords: 0,
-        status: "Active",
-    },
-    {
-        id: 2,
-        name: "Manoj Reddy",
-        joined: "Sep 4, 2025, 03:51:21 PM",
-        package: "N/A",
-        keywords: 0,
-        status: "Active",
-    },
-    {
-        id: 3,
-        name: "Debasish",
-        joined: "Sep 4, 2025, 01:30:32 PM",
-        package: "Starter",
-        keywords: 0,
-        status: "Active",
-    },
-    {
-        id: 4,
-        name: "manoj",
-        joined: "Sep 4, 2025, 01:01:23 PM",
-        package: "N/A",
-        keywords: 0,
-        status: "Active",
-    },
-    {
-        id: 5,
-        name: "SURJEET",
-        joined: "Sep 4, 2025, 11:52:02 AM",
-        package: "N/A",
-        keywords: 0,
-        status: "Active",
-    },
-    {
-        id: 6,
-        name: "manoj reddy",
-        joined: "Sep 4, 2025, 11:50:34 AM",
-        package: "N/A",
-        keywords: 0,
-        status: "Active",
-    },
-];
+
+
 
 const UsersList = () => {
 
@@ -81,6 +32,7 @@ const UsersList = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [toggleLoading, setToggleLoading] = useState(null);
+    const [btnStatus, setBtnStatus] = useState("")
 
 
     const [success, setSuccess] = useState(true);
@@ -93,13 +45,14 @@ const UsersList = () => {
 
     const [name, setName] = useState("");
     const limit = 4;
-    const getUsers = async (searchName = name, page = currentPage) => {
+    const getUsers = async (searchName = name, page = currentPage, status = btnStatus) => {
         try {
             setLoading(true)
             let resp = await axios.get(`/api/customer/customers`, {
                 params: {
                     limit,
                     page,
+                    status,
                     name: searchName,
                 },
                 headers: {
@@ -150,6 +103,7 @@ const UsersList = () => {
     };
 
 
+
     return (
         <div className="users-page">
             <div className="cards-row">
@@ -177,18 +131,28 @@ const UsersList = () => {
 
 
             </div>
+            <div className="status_button_div">
+                <div>
+                    <button onClick={() => getUsers(name, 1, "Active")}>
+                        {loading ? "Loading..." : "Active"}
+                    </button>
+                    <button onClick={() => getUsers(name, 1, "Inactive")}>InActive</button>
+                </div>
 
-            <div className="table-toolbar">
-                <input
-                    className="search-input"
-                    placeholder="Search users"
-                    value={name}
-                    onChange={(e) => {
-                        const value = e.target.value
-                        setName(value)
-                        getUsers(value, 1, itemPerPage);
-                    }}
-                />
+                <div className="table-toolbar">
+                    <input
+                        className="search-input"
+                        placeholder="Search users"
+                        value={name}
+                        onChange={(e) => {
+                            const value = e.target.value
+                            setName(value)
+
+
+                        }}
+                    />
+                </div>
+
             </div>
 
             <div className="users-table-wrap">
