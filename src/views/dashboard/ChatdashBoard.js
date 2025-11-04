@@ -30,6 +30,7 @@ import {
 } from "chart.js";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { FormControl, InputLabel } from "@material-ui/core";
 
 // ChartJS.register(
 //     LineElement,
@@ -86,7 +87,6 @@ export default function ChatdashBoard(props) {
         };
     }, [user]);
 
-
     const totalUsers = user?.chart?.datasets?.[0]?.data || [];
     const inactiveUsers = user?.chart?.datasets?.[1]?.data || [];
     const newUsers = user?.chart?.datasets?.[3]?.data || [];
@@ -94,6 +94,9 @@ export default function ChatdashBoard(props) {
     const allValues = [...totalUsers, ...inactiveUsers, ...newUsers].map(Number);
     const maxValue = Math.max(...allValues, 1);
     const suggestedMax = maxValue < 10 ? maxValue + 2 : maxValue * 1.1;
+
+    const currentYear = new Date().getFullYear();
+    const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - i);
     return (
         <Box p={3}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -102,263 +105,129 @@ export default function ChatdashBoard(props) {
 
             {/* Month Filter */}
             <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        mb: 2,
-                    }}
-                >
-                    <input
-                        placeholder="Enter Year"
+                <div style={{ width: "180px", marginBottom: "12px" }}>
+                    <select
                         name="year"
                         value={year}
                         onChange={(e) => setYear(e.target.value)}
                         style={{
-                            borderRadius: "12px",
+                            width: "100%",
                             padding: "18px 12px",
-                            backgroundColor: "#fff",
-                            boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
-                            width: "180px",
-                            fontWeight: 600,
-                            fontSize: "14px",
-                            "& .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#d1d5db",
-                            },
-                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#6366f1",
-                            },
-                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#4f46e5",
-                                borderWidth: "2px",
-                            },
-                        }}
-                    />
-                </Box>
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        mb: 2,
-                    }}
-                >
-                    <Select
-                        value={month}
-                        onChange={(e) => setMonth(e.target.value)}
-                        size="small"
-                        sx={{
                             borderRadius: "12px",
-                            padding: "6px 12px",
                             backgroundColor: "#fff",
                             boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
-                            width: "180px",
+                            border: "1px solid #d1d5db",
                             fontWeight: 600,
                             fontSize: "14px",
-                            "& .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#d1d5db",
-                            },
-                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#6366f1",
-                            },
-                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#4f46e5",
-                                borderWidth: "2px",
-                            },
+                            cursor: "pointer",
                         }}
                     >
-                        {months.map((m, i) => (
-                            <MenuItem
-                                key={i}
-                                value={m}
-                                sx={{
-                                    fontWeight: 500,
-                                    "&:hover": {
-                                        backgroundColor: "#eef2ff",
-                                    },
-                                }}
-                            >
-                                {m}
-                            </MenuItem>
+                        <option value="">Select Year</option>
+                        {yearOptions.map((yr) => (
+                            <option key={yr} value={yr}>
+                                {yr}
+                            </option>
                         ))}
-                    </Select>
-                </Box>
+                    </select>
+                </div>
+                <div style={{ width: "180px", marginBottom: "12px" }}>
+                    <select
+                        name="month"
+                        value={month}
+                        onChange={(e) => setMonth(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "18px 12px",
+                            borderRadius: "12px",
+                            backgroundColor: "#fff",
+                            boxShadow: "0px 2px 10px rgba(0,0,0,0.1)",
+                            border: "1px solid #d1d5db",
+                            fontWeight: 600,
+                            fontSize: "14px",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <option value="">Select Month</option>
+                        {months.map((yr) => (
+                            <option key={yr} value={yr}>
+                                {yr}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
 
             <WidgetsDropdown loading={loading} user={user} getUsers={getUsers} />
 
             {/* Line Chart */}
-            <Box>
-                <Card>
-                    <CardContent
-                        sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
-                    >
-                        <Typography variant="h6" fontWeight="bold">
-                            Month-wise User Growth
-                        </Typography>
-                        {/* <Line data={user.chart} />  */}
+            <Box sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
 
-                        <div>
-                            {/* User Counts */}
-                            <div
-                                style={{
-                                    display: "flex",
-                                    gap: "20px",
-                                    marginBottom: "10px",
-                                    fontSize: "16px",
-                                    fontWeight: "600",
-                                }}
-                            >
-                                <span style={{ color: "green" }}>
-                                    🟢 Active Users → {user?.monthActive || 0}
-                                </span>
-                                <span style={{ color: "red" }}>
-                                    🔴 Inactive Users → {user?.monthInactive || 0}
-                                </span>
-                                <span style={{ color: "#1E88E5", fontWeight: "600" }}>
-                                    🟦 New Users → {user?.newUsersCount || 0}
-                                </span>
-                            </div>
+                <Card >
 
-                            {/* Line Chart */}
-                            {/* <div
-                                style={{ width: "100%", height: "350px", marginBottom: "1rem" }}
-                            >
-                                <Line
-                                    data={{
-                                        labels: chartData.labels,
-                                        datasets: [
-                                            {
-                                                label: "Total Users",
-                                                data: user?.chart?.datasets[0]?.data,
-                                                borderWidth: 2,
-                                                borderColor: "#4CAF50",
-                                                backgroundColor: "rgba(76, 175, 80, 0.2)",
-                                                tension: 0.4,
-                                            },
-                                            {
-                                                label: "Inactive Users",
-                                                data: user?.chart?.datasets[1]?.data,
-                                                borderWidth: 2,
-                                                borderColor: "#E53935",
-                                                backgroundColor: "rgba(229, 57, 53, 0.2)",
-                                                tension: 0.4,
-                                            },
-                                            {
-                                                label: "New Users",
-                                                data: user?.chart?.datasets[3]?.data,
-                                                borderWidth: 2,
-                                                borderColor: "#1E88E5",
-                                                backgroundColor: "rgba(30, 136, 229, 0.2)",
-                                                tension: 0.4,
-                                            },
-                                        ]
 
-                                    }}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: { position: "top" },
-                                            datalabels: {
-                                                display: true,
-                                                align: "top",
-                                                anchor: "end",
-                                                font: { weight: "bold" },
-                                                formatter: (value) => (value > 0 ? value : ""),
-                                            },
-                                        },
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true,
-                                                ticks: { stepSize: 1 },
-                                            },
-                                        },
-                                    }}
-                                />
-                            </div> */}
-                            <div style={{ width: "100%", height: "350px", marginBottom: "1rem" }}>
-                                <Line
-                                    data={{
-                                        labels: user?.chart?.labels || [],
-                                        datasets: [
-                                            {
-                                                label: "Total Users",
-                                                data: totalUsers,
-                                                borderWidth: 2,
-                                                borderColor: "#4CAF50",
-                                                backgroundColor: "rgba(76, 175, 80, 0.2)",
-                                                tension: 0.4,
-                                                pointRadius: 5,
-                                            },
-                                            {
-                                                label: "Inactive Users",
-                                                data: inactiveUsers,
-                                                borderWidth: 2,
-                                                borderColor: "#E53935",
-                                                backgroundColor: "rgba(229, 57, 53, 0.2)",
-                                                tension: 0.4,
-                                                pointRadius: 5,
-                                            },
-                                            {
-                                                label: "New Users",
-                                                data: newUsers,
-                                                borderWidth: 2,
-                                                borderColor: "#1E88E5",
-                                                backgroundColor: "rgba(30, 136, 229, 0.2)",
-                                                tension: 0.4,
-                                                pointRadius: 5,
-                                            },
-                                        ],
-                                    }}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                            legend: { position: "top" },
-                                            datalabels: {
-                                                display: true,
-                                                align: "top",
-                                                anchor: "end",
-                                                formatter: (v) => (v > 0 ? v : ""),
-                                                font: { weight: "bold" },
-                                            },
-                                        },
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true,
-                                                ticks: {
-                                                    stepSize: maxValue < 10 ? 1 : undefined,
-                                                },
-                                                suggestedMax,
-                                            },
-                                        },
-                                    }}
-                                />
-                            </div>
+                    <Typography variant="h6" fontWeight="bold" sx={{ paddingLeft: "5px" }}>
+                        Month-wise User Growth
+                    </Typography>
 
+                    <div>
+                        {/* User Counts */}
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: "20px",
+                                marginBottom: "10px",
+                                fontSize: "16px",
+                                fontWeight: "600",
+                            }}
+                        >
+                            <span style={{ color: "green" }}>
+                                🟢 Active Users → {user?.monthActive || 0}
+                            </span>
+                            <span style={{ color: "red" }}>
+                                🔴 Inactive Users → {user?.monthInactive || 0}
+                            </span>
+                            <span style={{ color: "#1E88E5", fontWeight: "600" }}>
+                                🟦 New Users → {user?.newUsersCount || 0}
+                            </span>
                         </div>
-                        {/* Revenue Chat */}
+
+                        {/* Line Chart */}
+
+                        <div
+                            style={{ width: "100%", height: "350px", }}
 
 
-                        <div style={{ width: "100%", height: "350px" }}>
+                        >
                             <Line
                                 data={{
-                                    labels: chartData.labels,
+                                    labels: user?.chart?.labels || [],
                                     datasets: [
                                         {
-                                            label: `Revenue ₹${Number(
-                                                user?.totalRevenue || 0
-                                            ).toLocaleString("en-IN")}`,
-                                            data: (user?.chart?.datasets[2]?.data || []).map(Number),
-                                            borderWidth: 3,
+                                            label: "Total Users",
+                                            data: totalUsers,
+                                            borderWidth: 2,
                                             borderColor: "#4CAF50",
-                                            backgroundColor: "rgba(76, 175, 80, 0.25)",
+                                            backgroundColor: "rgba(76, 175, 80, 0.2)",
                                             tension: 0.4,
-                                            pointBackgroundColor: "#1B5E20",
                                             pointRadius: 5,
-                                            pointHoverRadius: 7,
+                                        },
+                                        {
+                                            label: "Inactive Users",
+                                            data: inactiveUsers,
+                                            borderWidth: 2,
+                                            borderColor: "#E53935",
+                                            backgroundColor: "rgba(229, 57, 53, 0.2)",
+                                            tension: 0.4,
+                                            pointRadius: 5,
+                                        },
+                                        {
+                                            label: "New Users",
+                                            data: newUsers,
+                                            borderWidth: 2,
+                                            borderColor: "#1E88E5",
+                                            backgroundColor: "rgba(30, 136, 229, 0.2)",
+                                            tension: 0.4,
+                                            pointRadius: 5,
                                         },
                                     ],
                                 }}
@@ -366,33 +235,95 @@ export default function ChatdashBoard(props) {
                                     responsive: true,
                                     maintainAspectRatio: false,
                                     plugins: {
-                                        tooltip: {
-                                            callbacks: {
-                                                label: (ctx) =>
-                                                    `₹${Number(ctx.raw).toLocaleString("en-IN")}`,
-                                            },
+                                        legend: { position: "top" },
+                                        datalabels: {
+                                            display: true,
+                                            align: "top",
+                                            anchor: "end",
+                                            formatter: (v) => (v > 0 ? v : ""),
+                                            font: { weight: "bold" },
                                         },
                                     },
                                     scales: {
                                         y: {
                                             beginAtZero: true,
-                                            ticks: { stepSize: 1 },
-
-                                            suggestedMax: maxValue + 2,
-                                        },
-                                        x: {
                                             ticks: {
-                                                color: "#555",
-                                                font: { size: 12 },
+                                                stepSize: maxValue < 10 ? 1 : undefined,
                                             },
+                                            suggestedMax,
                                         },
                                     },
                                 }}
                             />
                         </div>
-                    </CardContent>
+                    </div>
                 </Card>
+                {/* Revenue Chat */}
+                <Card >
+                    <Typography variant="h6" fontWeight="bold" sx={{ paddingLeft: "5px" }}>
+                        Month-wise User Revenue
+                    </Typography>
+
+                    <span style={{ color: "#2E7D32", fontWeight: 600 }}>
+                        💰 User Revenue → ₹{Number(user?.totalRevenue).toLocaleString() || 0}
+                    </span>
+
+                    <div style={{ width: "100%", height: "350px" }}>
+                        <Line
+                            data={{
+                                labels: chartData.labels,
+                                datasets: [
+                                    {
+                                        label: `Revenue ₹${Number(
+                                            user?.totalRevenue || 0
+                                        ).toLocaleString("en-IN")}`,
+                                        data: (user?.chart?.datasets[2]?.data || []).map(Number),
+                                        borderWidth: 3,
+                                        fontSize: "2rem",
+                                        borderColor: "#4CAF50",
+                                        backgroundColor: "rgba(76, 175, 80, 0.25)",
+                                        tension: 0.4,
+                                        pointBackgroundColor: "#1B5E20",
+                                        pointRadius: 5,
+                                        pointHoverRadius: 7,
+                                    },
+                                ],
+                            }}
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: (ctx) =>
+                                                `₹${Number(ctx.raw).toLocaleString("en-IN")}`,
+                                        },
+                                    },
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: { stepSize: 1 },
+
+                                        suggestedMax: maxValue + 2,
+                                    },
+                                    x: {
+                                        ticks: {
+                                            color: "#555",
+                                            font: { size: 12 },
+                                        },
+                                    },
+                                },
+                            }}
+                        />
+                    </div>
+                </Card>
+                {/* <CardContent
+                        sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+                    >
+                    </CardContent> */}
+
             </Box>
-        </Box>
+        </Box >
     );
 }
