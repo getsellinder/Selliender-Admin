@@ -24,7 +24,8 @@ const Dashboard = () => {
 
       });
       console.log("resp?.data", resp?.data)
-      setUser(resp?.data);
+      // setUser(resp?.data);
+      setUser(JSON.parse(JSON.stringify(resp?.data)))
     } catch (error) {
       let msg = error?.response?.data?.message;
       console.log("error.getUsers", error);
@@ -34,9 +35,6 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   return (
     <>
