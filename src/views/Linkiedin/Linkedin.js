@@ -23,14 +23,12 @@ import { useLinkedin } from "./LinkedenContext";
 const Linkedin = () => {
   const {
     anaysicResult,
-    handleLinkedinDelete,
-    linkedindelLoading,
+
     linkedinLoading,
-    handleSinglePackage,
-    singlePlanData,
+
     packageviewLoading,
     getAllAnalysis,
-    setPage
+
   } = useLinkedin();
 
   const [currentPage, setCurrentPage] = useState();
@@ -69,14 +67,13 @@ const Linkedin = () => {
 
     "Id",
     "Customer",
-    "Profile",
+    "LinkedinURL",
     "Date",
     "Action",
-    // "Languages",
-    // "Posts",
-    // "Awards",
+
 
   ];
+  console.log("analysic", analysic)
 
   return (
     <div className="main-content">
@@ -185,7 +182,7 @@ const Linkedin = () => {
                       >
                         <tr>
                           {tableheading.map((name) => (
-                            <th style={{textAlign:"center"}}
+                            <th style={{ textAlign: "center" }}
                             >
                               {name}
                             </th>
@@ -209,7 +206,7 @@ const Linkedin = () => {
                         ) : (
                           analysic.map((user, i) => {
                             let content = user?.LinkedinContentId
-                     
+
 
                             return (
                               <tr key={i}>
@@ -217,9 +214,18 @@ const Linkedin = () => {
                                 <td className="text-center">{user?.LinkedinContentId?.name}</td>
 
 
-                                <td className="text-center">{(content.education.map(e => e.degree + " at " + e.school))}</td>
                                 <td className="text-center">
-                                 {user?.createdAt}
+                                  <a
+                                    href={user?.LinkedinContentId?.LinkedinURL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: "#1E88E5", fontWeight: "600", cursor: "pointer" }}
+                                  >
+                                    {user?.LinkedinContentId?.LinkedinURL}
+                                  </a>
+                                </td>
+                                <td className="text-center">
+                                  {user?.createdAt}
                                 </td>
 
 

@@ -38,14 +38,12 @@ export const LinkedinProvider = ({ children }) => {
           page,
           limit,
           name,
-
         },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const result = res.data;
-
       setAllanaysicResult(result);
     } catch (error) {
       let message = error.response.data.message;
@@ -91,7 +89,7 @@ export const LinkedinProvider = ({ children }) => {
       await getAllAnalysis(page, PageLimit, name);
       toast.success(res.data.message);
     } catch (error) {
-      console.log("handleLinkedinDelete.error",error)
+      console.log("handleLinkedinDelete.error", error)
       let message = error?.response?.data?.message;
       toast.error(message || "Internarl Server Error");
     } finally {
@@ -106,7 +104,7 @@ export const LinkedinProvider = ({ children }) => {
   return (
     <LinkedinContext.Provider
       value={{
-   
+
         getAllAnalysis,
         setName,
         setPackagePrice,

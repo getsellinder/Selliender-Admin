@@ -153,7 +153,7 @@ import PlanAdd from "./views/Plans/PlanAdd";
 import PlanEdit from "./views/Plans/PlansEdit";
 import PlanView from "./views/Plans/PlansView";
 import Linkedin from "./views/Linkiedin/Linkedin";
-import LinkedinView from "./views/Linkiedin/LinkedinView";
+
 import Leeds from "./views/Leeds/Leeds";
 import Invoice from "./views/customerDetails/Invoice";
 import Billing from "./views/billing/Billing";
@@ -164,6 +164,8 @@ import BilingInvoice from "./views/billing/BilingInvoice";
 import UsersList from "./views/user/UsersList";
 import UserInvoiceTable from "./views/user/UserInvoiceTable";
 import { useLocation } from "react-router-dom";
+import UsageView from "./views/Linkiedin/UsageView";
+
 
 
 
@@ -713,7 +715,8 @@ const routes = [
   {
     path: "/Usage-user/view/:id",
     name: "Usage",
-    element: LinkedinView,
+
+    element: UsageView,
     navName: "Website Related",
   },
   {

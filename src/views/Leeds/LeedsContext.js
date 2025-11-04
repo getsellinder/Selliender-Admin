@@ -18,7 +18,7 @@ export const LeedsProvider = ({ children }) => {
   const [packageviewLoading, setPackageViewLoading] = useState(null);
   const [singlePlanData, setSinglePlanData] = useState([]);
 
-  const [packageId,setPackageId]=useState(()=>{
+  const [packageId, setPackageId] = useState(() => {
     return localStorage.getItem("packageId") || ""
   })
   const [page, setPage] = useState(1);
@@ -38,7 +38,7 @@ export const LeedsProvider = ({ children }) => {
           page,
           limit,
           name,
-       
+
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,18 +58,18 @@ export const LeedsProvider = ({ children }) => {
 
   const handleSingleLeed = async (id) => {
     try {
-    
+
       setPackageViewLoading(id);
       const res = await axios.get(`/api/package/get/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       setSinglePlanData(res.data);
-      localStorage.setItem("packageId",id)
+      localStorage.setItem("packageId", id)
       setPackageId(id)
-      console.log("red.data",res.data)
+      console.log("red.data", res.data)
     } catch (error) {
       const messsage = error?.response?.data?.message;
       toast.error(messsage || "Internal Server Error");
@@ -86,17 +86,17 @@ export const LeedsProvider = ({ children }) => {
   return (
     <LeedsContext.Provider
       value={{
-   
+
         getAllLeeds,
-      
-    
+
+
         setPageLimit,
         allLeeds,
-     
+
         packagedelLoading,
         packageLoading,
         handleSingleLeed,
-        singlePlanData,packageviewLoading
+        singlePlanData, packageviewLoading
       }}
     >
       {children}
