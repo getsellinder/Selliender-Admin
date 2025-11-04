@@ -86,6 +86,14 @@ export default function ChatdashBoard(props) {
         };
     }, [user]);
 
+
+    const totalUsers = user?.chart?.datasets?.[0]?.data || [];
+    const inactiveUsers = user?.chart?.datasets?.[1]?.data || [];
+    const newUsers = user?.chart?.datasets?.[3]?.data || [];
+
+    const allValues = [...totalUsers, ...inactiveUsers, ...newUsers].map(Number);
+    const maxValue = Math.max(...allValues, 1);
+    const suggestedMax = maxValue < 10 ? maxValue + 2 : maxValue * 1.1;
     return (
         <Box p={3}>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -208,10 +216,13 @@ export default function ChatdashBoard(props) {
                                 <span style={{ color: "red" }}>
                                     🔴 Inactive Users → {user?.monthInactive || 0}
                                 </span>
+                                <span style={{ color: "#1E88E5", fontWeight: "600" }}>
+                                    🟦 New Users → {user?.newUsersCount || 0}
+                                </span>
                             </div>
 
                             {/* Line Chart */}
-                            <div
+                            {/* <div
                                 style={{ width: "100%", height: "350px", marginBottom: "1rem" }}
                             >
                                 <Line
@@ -222,17 +233,28 @@ export default function ChatdashBoard(props) {
                                                 label: "Total Users",
                                                 data: user?.chart?.datasets[0]?.data,
                                                 borderWidth: 2,
-                                                borderColor: "green",
-                                                backgroundColor: "green",
+                                                borderColor: "#4CAF50",
+                                                backgroundColor: "rgba(76, 175, 80, 0.2)",
+                                                tension: 0.4,
                                             },
                                             {
                                                 label: "Inactive Users",
                                                 data: user?.chart?.datasets[1]?.data,
                                                 borderWidth: 2,
-                                                borderColor: "red",
-                                                backgroundColor: "red",
+                                                borderColor: "#E53935",
+                                                backgroundColor: "rgba(229, 57, 53, 0.2)",
+                                                tension: 0.4,
                                             },
-                                        ],
+                                            {
+                                                label: "New Users",
+                                                data: user?.chart?.datasets[3]?.data,
+                                                borderWidth: 2,
+                                                borderColor: "#1E88E5",
+                                                backgroundColor: "rgba(30, 136, 229, 0.2)",
+                                                tension: 0.4,
+                                            },
+                                        ]
+
                                     }}
                                     options={{
                                         responsive: true,
@@ -255,7 +277,67 @@ export default function ChatdashBoard(props) {
                                         },
                                     }}
                                 />
+                            </div> */}
+                            <div style={{ width: "100%", height: "350px", marginBottom: "1rem" }}>
+                                <Line
+                                    data={{
+                                        labels: user?.chart?.labels || [],
+                                        datasets: [
+                                            {
+                                                label: "Total Users",
+                                                data: totalUsers,
+                                                borderWidth: 2,
+                                                borderColor: "#4CAF50",
+                                                backgroundColor: "rgba(76, 175, 80, 0.2)",
+                                                tension: 0.4,
+                                                pointRadius: 5,
+                                            },
+                                            {
+                                                label: "Inactive Users",
+                                                data: inactiveUsers,
+                                                borderWidth: 2,
+                                                borderColor: "#E53935",
+                                                backgroundColor: "rgba(229, 57, 53, 0.2)",
+                                                tension: 0.4,
+                                                pointRadius: 5,
+                                            },
+                                            {
+                                                label: "New Users",
+                                                data: newUsers,
+                                                borderWidth: 2,
+                                                borderColor: "#1E88E5",
+                                                backgroundColor: "rgba(30, 136, 229, 0.2)",
+                                                tension: 0.4,
+                                                pointRadius: 5,
+                                            },
+                                        ],
+                                    }}
+                                    options={{
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: {
+                                            legend: { position: "top" },
+                                            datalabels: {
+                                                display: true,
+                                                align: "top",
+                                                anchor: "end",
+                                                formatter: (v) => (v > 0 ? v : ""),
+                                                font: { weight: "bold" },
+                                            },
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    stepSize: maxValue < 10 ? 1 : undefined,
+                                                },
+                                                suggestedMax,
+                                            },
+                                        },
+                                    }}
+                                />
                             </div>
+
                         </div>
                         {/* Revenue Chat */}
 
@@ -294,23 +376,9 @@ export default function ChatdashBoard(props) {
                                     scales: {
                                         y: {
                                             beginAtZero: true,
-                                            ticks: {
-                                                callback: (value) =>
-                                                    `₹${Number(value).toLocaleString("en-IN")}`,
-                                                stepSize: Math.ceil(
-                                                    (Math.max(
-                                                        ...(user?.chart?.datasets[2]?.data || [0])
-                                                    ) +
-                                                        1) /
-                                                    5
-                                                ),
-                                                precision: 0,
-                                                color: "#555",
-                                                font: { size: 12, weight: "500" },
-                                            },
-                                            suggestedMax:
-                                                Math.max(...(user?.chart?.datasets[2]?.data || [0])) +
-                                                5000,
+                                            ticks: { stepSize: 1 },
+
+                                            suggestedMax: maxValue + 2,
                                         },
                                         x: {
                                             ticks: {
