@@ -26,12 +26,10 @@ import {
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
 } from "chart.js";
 import WidgetsDropdown from "../widgets/WidgetsDropdown";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-
-
 
 // ChartJS.register(
 //     LineElement,
@@ -71,7 +69,6 @@ export default function ChatdashBoard(props) {
         "November",
         "December",
     ];
-
 
     useEffect(() => {
         getUsers(month, year);
@@ -186,7 +183,9 @@ export default function ChatdashBoard(props) {
             {/* Line Chart */}
             <Box>
                 <Card>
-                    <CardContent sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+                    <CardContent
+                        sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
+                    >
                         <Typography variant="h6" fontWeight="bold">
                             Month-wise User Growth
                         </Typography>
@@ -194,25 +193,33 @@ export default function ChatdashBoard(props) {
 
                         <div>
                             {/* User Counts */}
-                            <div style={{
-                                display: "flex",
-                                gap: "20px",
-                                marginBottom: "10px",
-                                fontSize: "16px",
-                                fontWeight: "600"
-                            }}>
-                                <span style={{ color: "green" }}>🟢 Active Users → {user?.monthActive || 0}</span>
-                                <span style={{ color: "red" }}>🔴 Inactive Users → {user?.monthInactive || 0}</span>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "20px",
+                                    marginBottom: "10px",
+                                    fontSize: "16px",
+                                    fontWeight: "600",
+                                }}
+                            >
+                                <span style={{ color: "green" }}>
+                                    🟢 Active Users → {user?.monthActive || 0}
+                                </span>
+                                <span style={{ color: "red" }}>
+                                    🔴 Inactive Users → {user?.monthInactive || 0}
+                                </span>
                             </div>
 
                             {/* Line Chart */}
-                            <div style={{ width: "100%", height: "350px", marginBottom: "1rem" }}>
+                            <div
+                                style={{ width: "100%", height: "350px", marginBottom: "1rem" }}
+                            >
                                 <Line
                                     data={{
                                         labels: chartData.labels,
                                         datasets: [
                                             {
-                                                label: "Active Users",
+                                                label: "Total Users",
                                                 data: user?.chart?.datasets[0]?.data,
                                                 borderWidth: 2,
                                                 borderColor: "green",
@@ -250,31 +257,24 @@ export default function ChatdashBoard(props) {
                                 />
                             </div>
                         </div>
+                        {/* Revenue Chat */}
 
-                        {/* <div style={{ width: "100%", height: "350px" }}>
-                            <Line
-                                data={chartData}
-                                options={{
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: { legend: { position: "top" } },
-                                    scales: { y: { beginAtZero: true } },
-                                }}
-                            />
-                        </div> */}
+
                         <div style={{ width: "100%", height: "350px" }}>
                             <Line
                                 data={{
                                     labels: chartData.labels,
                                     datasets: [
                                         {
-                                            label: "Revenue (₹)",
-                                            data: user?.chart?.datasets[2]?.data || [],
+                                            label: `Revenue ₹${Number(
+                                                user?.totalRevenue || 0
+                                            ).toLocaleString("en-IN")}`,
+                                            data: (user?.chart?.datasets[2]?.data || []).map(Number),
                                             borderWidth: 3,
-                                            borderColor: "#4CAF50", // Green premium color
-                                            backgroundColor: "rgba(76, 175, 80, 0.25)", // light green fill
-                                            tension: 0.4, // smooth curve
-                                            pointBackgroundColor: "#1B5E20", // dark green dots
+                                            borderColor: "#4CAF50",
+                                            backgroundColor: "rgba(76, 175, 80, 0.25)",
+                                            tension: 0.4,
+                                            pointBackgroundColor: "#1B5E20",
                                             pointRadius: 5,
                                             pointHoverRadius: 7,
                                         },
@@ -284,30 +284,33 @@ export default function ChatdashBoard(props) {
                                     responsive: true,
                                     maintainAspectRatio: false,
                                     plugins: {
-                                        legend: {
-                                            labels: {
-                                                color: "#333",
-                                                font: { size: 14, weight: "600" },
-                                            },
-                                        },
                                         tooltip: {
                                             callbacks: {
-                                                label: (ctx) => `₹${ctx.raw.toLocaleString()}`,
+                                                label: (ctx) =>
+                                                    `₹${Number(ctx.raw).toLocaleString("en-IN")}`,
                                             },
-                                            backgroundColor: "#1e1e1e",
-                                            titleColor: "#fff",
-                                            bodyColor: "#fff",
                                         },
                                     },
                                     scales: {
                                         y: {
                                             beginAtZero: true,
-
                                             ticks: {
-                                                callback: (value) => `₹${value}`,
+                                                callback: (value) =>
+                                                    `₹${Number(value).toLocaleString("en-IN")}`,
+                                                stepSize: Math.ceil(
+                                                    (Math.max(
+                                                        ...(user?.chart?.datasets[2]?.data || [0])
+                                                    ) +
+                                                        1) /
+                                                    5
+                                                ),
+                                                precision: 0,
                                                 color: "#555",
                                                 font: { size: 12, weight: "500" },
                                             },
+                                            suggestedMax:
+                                                Math.max(...(user?.chart?.datasets[2]?.data || [0])) +
+                                                5000,
                                         },
                                         x: {
                                             ticks: {
@@ -319,7 +322,6 @@ export default function ChatdashBoard(props) {
                                 }}
                             />
                         </div>
-
                     </CardContent>
                 </Card>
             </Box>
