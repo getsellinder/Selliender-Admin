@@ -58,7 +58,7 @@ export const LinkedinProvider = ({ children }) => {
     try {
 
       setLinkedinViewLoading(id);
-      const res = await axios.get(`/api/linked/analysis/${id}`, {
+      const res = await axios.get(`/api/linked/disc/latest/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

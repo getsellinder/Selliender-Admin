@@ -169,13 +169,13 @@ const _nav = [
     group: "",
 
     items: [
-      {
-        component: CNavItem,
-        name: "Banner",
-        icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
-        to: "/banner",
-        group: "Settings",
-      },
+      // {
+      //   component: CNavItem,
+      //   name: "Banner",
+      //   icon: <CIcon icon={cilImage} customClassName="nav-icon" />,
+      //   to: "/banner",
+      //   group: "Settings",
+      // },
 
       {
         component: CNavItem,

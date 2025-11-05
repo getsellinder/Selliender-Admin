@@ -141,7 +141,7 @@ const SupportRequest = () => {
                             entries
                           </label>
                         </div>
-                        <div className="ml-2 mt-2">
+                        {/* <div className="ml-2 mt-2">
                           <Button
                             variant="contained"
                             color={status === "OPEN" ? "primary" : ""}
@@ -175,7 +175,7 @@ const SupportRequest = () => {
                             {status === "OPEN"}
                             Finished Requests
                           </Button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 

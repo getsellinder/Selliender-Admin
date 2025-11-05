@@ -64,11 +64,12 @@ const Linkedin = () => {
 
 
   const tableheading = [
+    "Date",
 
     "Id",
     "Customer",
     "LinkedinURL",
-    "Date",
+
     "Action",
 
 
@@ -210,6 +211,9 @@ const Linkedin = () => {
 
                             return (
                               <tr key={i}>
+                                <td className="text-center">
+                                  {user?.createdAt}
+                                </td>
                                 <td className="text-center">{user?.LinkedinContentId?._id}</td>
                                 <td className="text-center">{user?.LinkedinContentId?.name}</td>
 
@@ -224,9 +228,7 @@ const Linkedin = () => {
                                     {user?.LinkedinContentId?.LinkedinURL}
                                   </a>
                                 </td>
-                                <td className="text-center">
-                                  {user?.createdAt}
-                                </td>
+
 
 
 
