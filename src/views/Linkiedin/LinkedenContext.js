@@ -19,6 +19,7 @@ export const LinkedinProvider = ({ children }) => {
   const [linkedinviewLoading, setLinkedinViewLoading] = useState(null);
   const [linkedinPlanData, setSingleLinkedinData] = useState([]);
 
+  const [userSearchingHistory, setUserSearchingHistory] = useState([]);
   const [linkedinId, setLinkedinId] = useState(() => {
     return localStorage.getItem("linkedinId") || ""
   })
@@ -54,18 +55,47 @@ export const LinkedinProvider = ({ children }) => {
   };
 
 
+
+
+  const getAllAnalysisSearchHistoryTable = async (
+    page = 1,
+    limit = PageLimit,
+    name,
+    userId
+  ) => {
+    try {
+      setLinkedinLoading(true);
+      const res = await axios.get(`/api/linked/analysis/${userId}`, {
+        params: {
+          page,
+          limit,
+          name,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const result = res.data;
+      setUserSearchingHistory(result);
+    } catch (error) {
+      let message = error.response.data.message;
+      toast.error(message);
+    } finally {
+      setLinkedinLoading(false);
+    }
+  };
   const handleLinkedinProfileDetails = async (id) => {
     try {
 
       setLinkedinViewLoading(id);
-      const res = await axios.get(`/api/linked/disc/latest/${id}`, {
+      const res = await axios.get(`/api/linked/analysis/admin/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       setSingleLinkedinData(res.data);
-      localStorage.setItem("linkedinId", id)
+
       setLinkedinId(id)
       console.log("red.data", res.data)
     } catch (error) {
@@ -115,7 +145,7 @@ export const LinkedinProvider = ({ children }) => {
         linkedindelLoading,
         linkedinLoading,
         handleLinkedinProfileDetails,
-        linkedinPlanData, linkedinviewLoading
+        linkedinPlanData, linkedinviewLoading, getAllAnalysisSearchHistoryTable, userSearchingHistory
       }}
     >
       {children}

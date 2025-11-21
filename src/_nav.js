@@ -117,26 +117,32 @@ const _nav = [
   },
 
 
+  // {
+
+  //   component: CNavGroup,
+  //   name: "Customer Service",
+  //   icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  //   group: "",
+
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: "Customer Support",
+  //       icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
+  //       to: "/support/request",
+  //       group: "Customer Service",
+  //     },
+
+
+  //   ],
+  // },
   {
-
-    component: CNavGroup,
-    name: "Customer Service",
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
-    group: "",
-
-    items: [
-      {
-        component: CNavItem,
-        name: "Customer Support",
-        icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
-        to: "/support/request",
-        group: "Customer Service",
-      },
-
-
-    ],
+    component: CNavItem,
+    name: "Customer Support",
+    icon: <CIcon icon={cilChatBubble} customClassName="nav-icon" />,
+    to: "/support/request",
+    group: "Customer Service",
   },
-
   {
     component: CNavItem,
     name: "Usage",

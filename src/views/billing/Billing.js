@@ -88,6 +88,7 @@ const Billing = () => {
     const handleNext = () => {
         if (currentPage < totalpages) setCurrentPage((prev) => prev - 1);
     };
+    console.log("biling?.getresult?", biling)
     return (
         <>
             <div>
@@ -192,8 +193,8 @@ const Billing = () => {
                                                         <button
                                                             className="orders-view-btn p-2"
                                                             onClick={() =>
-
-                                                                navigate(`/invoice/${r.userId._id}`)
+                                                                navigate(`/${r.userId.name}/invoice/${r._id}`)
+                                                                // navigate(`/invoice/${r.userId._id}`)
                                                             }
                                                         >
                                                             Invoice

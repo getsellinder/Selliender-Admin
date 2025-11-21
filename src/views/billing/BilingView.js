@@ -15,7 +15,6 @@ const ViewBiling = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    console.log("ViewBiling....................", billingInvoice, data);
 
     const token = isAutheticated();
 
@@ -116,6 +115,10 @@ const ViewBiling = () => {
                                 <div className="value">{invoicesWithGST?.PlanId?.Package}</div>
                             </div>
 
+                            <div className="profile-row">
+                                <div className="label">Amount:</div>
+                                <div className="value">{invoicesWithGST?.Amount}</div>
+                            </div>
                             <div className="profile-row">
                                 <div className="label">Current Subscription Start Date:</div>
                                 <div className="value">{invoicesWithGST?.plan_start_date}</div>

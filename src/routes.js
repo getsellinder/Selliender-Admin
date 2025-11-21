@@ -165,6 +165,8 @@ import UsersList from "./views/user/UsersList";
 import UserInvoiceTable from "./views/user/UserInvoiceTable";
 import { useLocation } from "react-router-dom";
 import UsageView from "./views/Linkiedin/UsageView";
+import LinkedinSearchResultsTable from "./views/Linkiedin/LinkedinSearchTable";
+import LinkedinView from "./views/Linkiedin/LinkedinView";
 
 
 
@@ -710,6 +712,13 @@ const routes = [
     path: "/Usage",
     name: "Usage",
     element: Linkedin,
+    navName: "Website Related",
+  },
+
+  {
+    path: "/Usage/search/history/table/:name/:userId",
+    name: "Usage",
+    element: LinkedinSearchResultsTable,
     navName: "Website Related",
   },
   {

@@ -18,10 +18,6 @@ const UsageView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (id && handleLinkedinProfileDetails) handleLinkedinProfileDetails(id);
-    }, [id]);
-
     const display = linkedinPlanData?.analysis;
 
     const content =
@@ -35,8 +31,11 @@ const UsageView = () => {
             );
         }
     };
+    useEffect(() => {
+        handleLinkedinProfileDetails(id);
+    }, [id]);
 
-    console.log("linkedinPlanData", linkedinPlanData);
+    console.log("linkedinPlanData.....................", linkedinPlanData);
     return (
         <div className="userpage-container">
             <div className="userpage-actions">

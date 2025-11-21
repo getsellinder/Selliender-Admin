@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 
@@ -20,16 +20,18 @@ import { CircularProgress } from "@mui/material";
 import { isAutheticated } from "src/auth";
 import { useLinkedin } from "./LinkedenContext";
 
-const Linkedin = () => {
+const LinkedinSearchResultsTable = () => {
   const {
     anaysicResult,
-
+    getAllAnalysisSearchHistoryTable,
+    userSearchingHistory,
     linkedinLoading,
 
     packageviewLoading,
     getAllAnalysis,
 
   } = useLinkedin();
+
 
   const [currentPage, setCurrentPage] = useState();
 
@@ -39,8 +41,11 @@ const Linkedin = () => {
 
   const token = isAutheticated();
   const navigate = useNavigate();
+  const { userId } = useParams()
+  const { name: username } = useParams()
 
-
+  console.log("userId", userId)
+  console.log("")
 
 
 
@@ -65,17 +70,18 @@ const Linkedin = () => {
 
   const tableheading = [
     "Date",
-
-    "Id",
-    "Customer",
-    // "LinkedinURL",
-    "SearchLimit",
-
+    "Searched  Name",
+    "Company Type",
+    // "Title",
     "Action",
 
 
   ];
-
+  useEffect(() => {
+    let page = 1
+    getAllAnalysisSearchHistoryTable(page, limit, name, userId)
+  }, [userId])
+  console.log("userSearchingHistory", userSearchingHistory.profiles)
 
   return (
     <div className="main-content">
@@ -92,7 +98,7 @@ const Linkedin = () => {
                      "
               >
                 <div style={{ fontSize: "22px" }} className="fw-bold">
-                  Usage
+                  LinkedIn Search Activities - {username}
                 </div>
 
 
@@ -206,17 +212,22 @@ const Linkedin = () => {
                             </td>
                           </tr>
                         ) : (
-                          analysic.map((user, i) => {
-                            let content = user?.LinkedinContentId
+                          userSearchingHistory?.profiles?.map((user, i) => {
 
-                            console.log("user", user)
+
+                            console.log("user0000000000000", user?.executiveSummary
+                            )
                             return (
                               <tr key={i}>
                                 <td className="text-center">
                                   {user?.createdAt}
                                 </td>
-                                <td className="text-center">{user?._id}</td>
-                                <td className="text-center">{user?.name}</td>
+                                <td className="text-center">{user?.executiveSummary?.profileName}</td>
+                                <td className="text-center">
+                                  {user?.executiveSummary?.companyType}
+                                </td>
+                                {/* <td className="text-center">{user?.executiveSummary?.title}</td> */}
+
 
 
                                 {/* <td className="text-center">
@@ -230,9 +241,7 @@ const Linkedin = () => {
                                   </a>
                                 </td> */}
 
-                                <td className="text-center">
-                                  {user?.SearchLimit}
-                                </td>
+
 
 
 
@@ -242,8 +251,7 @@ const Linkedin = () => {
 
 
                                 <td className="text-center">
-                                  {/* <Link to={`/Usage-user/view/${user?._id}`}> */}
-                                  <Link to={`/Usage/search/history/table/${user?.name}/${user?._id}`}>
+                                  <Link to={`/Usage-user/view/${user?._id}`}>
                                     <button
                                       style={{
                                         fontWeight: "600",
@@ -307,4 +315,4 @@ const Linkedin = () => {
   );
 };
 
-export default Linkedin;
+export default LinkedinSearchResultsTable;
