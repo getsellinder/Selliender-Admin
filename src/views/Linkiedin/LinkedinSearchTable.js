@@ -47,7 +47,10 @@ const LinkedinSearchResultsTable = () => {
   const { name: username } = useParams()
 
   const handleSearch = () => {
+
     getAllAnalysisSearchHistoryTable(page, limit, name, userId);
+    setName("")
+
   };
 
   const handleShowEntries = (e) => {
