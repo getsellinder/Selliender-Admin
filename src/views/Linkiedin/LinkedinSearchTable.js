@@ -22,11 +22,13 @@ import { useLinkedin } from "./LinkedenContext";
 
 const LinkedinSearchResultsTable = () => {
   const {
-    anaysicResult,
+
     getAllAnalysisSearchHistoryTable,
     userSearchingHistory,
-    linkedinLoading,
-
+    linkedinLoading, name, setName,
+    setPageLimit,
+    setPage,
+    page,
     packageviewLoading,
     getAllAnalysis,
 
@@ -37,34 +39,22 @@ const LinkedinSearchResultsTable = () => {
 
   const [limit, setLimit] = useState(5);
 
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
 
   const token = isAutheticated();
   const navigate = useNavigate();
   const { userId } = useParams()
   const { name: username } = useParams()
 
-  console.log("userId", userId)
-  console.log("")
-
-
-
-
-
-  const analysic = anaysicResult?.result;
-  console.log("analysic", analysic)
-
-
-
-  const handleSearch = (plan) => {
-    getAllAnalysis(1, limit, plan);
+  const handleSearch = () => {
+    getAllAnalysisSearchHistoryTable(page, limit, name, userId);
   };
 
   const handleShowEntries = (e) => {
     let newlimit = e.target.value;
 
-    setLimit(newlimit)
-    getAllAnalysis(1, newlimit, name);
+    setPageLimit(newlimit)
+    getAllAnalysisSearchHistoryTable(page, newlimit, name, userId);
   };
 
 
@@ -72,16 +62,18 @@ const LinkedinSearchResultsTable = () => {
     "Date",
     "Searched  Name",
     "Company Type",
-    // "Title",
     "Action",
 
 
   ];
   useEffect(() => {
-    let page = 1
+
     getAllAnalysisSearchHistoryTable(page, limit, name, userId)
   }, [userId])
-  console.log("userSearchingHistory", userSearchingHistory.profiles)
+  console.log('name', name)
+  console.log("limit", limit)
+  console.log("page", page)
+
 
   return (
     <div className="main-content">
@@ -156,14 +148,14 @@ const LinkedinSearchResultsTable = () => {
                             onChange={(e) => {
                               const val = e.target.value;
                               setName(val);
-                              getAllAnalysis(1, limit, val);
+                              getAllAnalysisSearchHistoryTable(page, limit, val, userId);
                             }}
                             fullWidth
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="end">
                                   <IconButton
-                                    onClick={() => handleSearch(name)}
+                                    onClick={() => handleSearch(page, limit, val, userId)}
                                     edge="end"
                                     color="primary"
                                   >
@@ -190,7 +182,7 @@ const LinkedinSearchResultsTable = () => {
                       >
                         <tr>
                           {tableheading.map((name) => (
-                            <th style={{ textAlign: "center" }}
+                            <th
                             >
                               {name}
                             </th>
@@ -198,7 +190,7 @@ const LinkedinSearchResultsTable = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {!linkedinLoading && analysic.length === 0 && (
+                        {!linkedinLoading && userSearchingHistory?.profiles?.length === 0 && (
                           <tr className="text-center">
                             <td colSpan="12">
                               <h5>No Data Available</h5>
@@ -215,42 +207,17 @@ const LinkedinSearchResultsTable = () => {
                           userSearchingHistory?.profiles?.map((user, i) => {
 
 
-                            console.log("user0000000000000", user?.executiveSummary
-                            )
+
                             return (
                               <tr key={i}>
-                                <td className="text-center">
+                                <td >
                                   {user?.createdAt}
                                 </td>
-                                <td className="text-center">{user?.executiveSummary?.profileName}</td>
-                                <td className="text-center">
+                                <td >{user?.executiveSummary?.profileName}</td>
+                                <td >
                                   {user?.executiveSummary?.companyType}
                                 </td>
-                                {/* <td className="text-center">{user?.executiveSummary?.title}</td> */}
-
-
-
-                                {/* <td className="text-center">
-                                  <a
-                                    href={user?.LinkedinContentId?.LinkedinURL}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{ color: "#1E88E5", fontWeight: "600", cursor: "pointer" }}
-                                  >
-                                    {user?.LinkedinContentId?.LinkedinURL}
-                                  </a>
-                                </td> */}
-
-
-
-
-
-
-
-
-
-
-                                <td className="text-center">
+                                <td >
                                   <Link to={`/Usage-user/view/${user?._id}`}>
                                     <button
                                       style={{
@@ -268,36 +235,18 @@ const LinkedinSearchResultsTable = () => {
                                     </button>
                                   </Link>
                                 </td>
-                                {/* <td className="text-start">
-                                  <button
-                                    onClick={() =>
-                                      handleLinkedinDelete(user?._id)
-                                    }
-                                    style={{
-                                      background: "red",
-                                      fontWeight: "600",
-                                      color: "#000",
-                                    }}
-                                    type="button"
-                                    className="mt-1 btn btn-info btn-sm  waves-effect waves-light btn-table ml-2"
-                                  >
-                                    {linkedindelLoading === user?._id ? (
-                                      <CircularProgress size={25} />
-                                    ) : (
-                                      "Delete"
-                                    )}
-                                  </button>
-                                </td> */}
+
                               </tr>
                             );
                           })
                         )}
                         <Pagination sx={{ textAlign: "end" }}
-                          count={anaysicResult.totalPages}
-                          page={anaysicResult.currentPage}
+                          count={userSearchingHistory.totalPages}
+                          page={page}
                           onChange={(e, value) => {
-                            setCurrentPage(value);
-                            getAllAnalysis(value, undefined, undefined, undefined);
+
+                            setPage(value);
+                            getAllAnalysisSearchHistoryTable(value, limit, name, userId);
                           }}
                           color="primary"
                           shape="rounded"

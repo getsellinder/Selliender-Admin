@@ -11,9 +11,9 @@ export const LinkedinProvider = ({ children }) => {
   const token = isAutheticated();
 
   const [linkedinLoading, setLinkedinLoading] = useState(false);
-  const [name, setName] = useState("");
+
   const [packagePrice, setPackagePrice] = useState("");
-  const [PageLimit, setPageLimit] = useState("");
+
   const [anaysicResult, setAllanaysicResult] = useState([]);
   const [linkedindelLoading, setLinkedinDelLoading] = useState(null);
   const [linkedinviewLoading, setLinkedinViewLoading] = useState(null);
@@ -24,36 +24,68 @@ export const LinkedinProvider = ({ children }) => {
     return localStorage.getItem("linkedinId") || ""
   })
   const [page, setPage] = useState(1);
+  const [PageLimit, setPageLimit] = useState(10);
+  const [name, setName] = useState("");
+
+
+  // const getAllAnalysis = async (
+  //   page = 1,
+  //   limit = PageLimit,
+  //   name = name,
+
+  // ) => {
+  //   try {
+  //     setLinkedinLoading(true);
+  //     const res = await axios.get("/api/linked/analysis", {
+  //       params: {
+  //         page,
+  //         limit,
+  //         name,
+  //       },
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const result = res.data;
+  //     setAllanaysicResult(result);
+  //   } catch (error) {
+  //     let message = error.response.data.message;
+  //     toast.error(message);
+  //   } finally {
+  //     setLinkedinLoading(false);
+  //   }
+  // };
 
 
   const getAllAnalysis = async (
-    page = 1,
-    limit = PageLimit,
-    name = name,
-
+    pageNum = 1,
+    limitNum = PageLimit,
+    searchName = name
   ) => {
     try {
       setLinkedinLoading(true);
+
+      const encodedName = encodeURIComponent(searchName || "");
+
       const res = await axios.get("/api/linked/analysis", {
         params: {
-          page,
-          limit,
-          name,
+          page: pageNum,
+          limit: limitNum,
+          name: encodedName,
         },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const result = res.data;
-      setAllanaysicResult(result);
+
+      setAllanaysicResult(res.data);
+
     } catch (error) {
-      let message = error.response.data.message;
-      toast.error(message);
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLinkedinLoading(false);
     }
   };
-
 
 
 
@@ -134,7 +166,7 @@ export const LinkedinProvider = ({ children }) => {
   return (
     <LinkedinContext.Provider
       value={{
-
+        page,
         getAllAnalysis,
         setName,
         setPackagePrice,
@@ -145,7 +177,7 @@ export const LinkedinProvider = ({ children }) => {
         linkedindelLoading,
         linkedinLoading,
         handleLinkedinProfileDetails,
-        linkedinPlanData, linkedinviewLoading, getAllAnalysisSearchHistoryTable, userSearchingHistory
+        linkedinPlanData, linkedinviewLoading, getAllAnalysisSearchHistoryTable, userSearchingHistory, name, setName
       }}
     >
       {children}
