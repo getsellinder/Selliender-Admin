@@ -160,10 +160,10 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: "Ticketes",
-    icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
+    name: "Tickets",
+    icon: <CIcon icon={cilCommentBubble} customClassName="nav-icon" />,
     to: "/tickets",
-    group: "Ticketes",
+    group: "Tickets",
   },
 
 
