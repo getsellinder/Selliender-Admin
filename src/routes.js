@@ -167,6 +167,8 @@ import { useLocation } from "react-router-dom";
 import UsageView from "./views/Linkiedin/UsageView";
 import LinkedinSearchResultsTable from "./views/Linkiedin/LinkedinSearchTable";
 import LinkedinView from "./views/Linkiedin/LinkedinView";
+import TicketingSystem from "./views/tickets/Ticket";
+import Messages from "./views/tickets/Messages";
 
 
 
@@ -806,6 +808,20 @@ const routes = [
     element: ViewOrders,
     navName: "Orders",
   },
+
+  {
+    path: "/tickets",
+    name: "Ticketes",
+    element: TicketingSystem,
+    navName: "Ticketes",
+  },
+
+  {
+    path: "/tickets/view/message/:id",
+    name: "Ticketes",
+    element: Messages,
+    navName: "Ticketes",
+  },
   // {
   //   path: "/orders/processing",
   //   name: "Processing Orders",
@@ -1051,6 +1067,10 @@ const routes = [
     element: ExportToExcel,
     navName: "Point of Sale",
   },
+
+  // tickates
+
+
   //--------- End Point of Sale Section Routes------------------------
 ];
 

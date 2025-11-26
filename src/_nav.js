@@ -158,6 +158,14 @@ const _nav = [
     to: "/leeds",
     group: "Customer Service",
   },
+  {
+    component: CNavItem,
+    name: "Ticketes",
+    icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
+    to: "/tickets",
+    group: "Ticketes",
+  },
+
 
 
   // {
