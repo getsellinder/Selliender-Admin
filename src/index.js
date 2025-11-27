@@ -21,6 +21,7 @@ import { PlanProvider } from "./views/Plans/PlanContext";
 import { LinkedinProvider } from "./views/Linkiedin/LinkedenContext";
 import { LeedsProvider } from "./views/Leeds/LeedsContext";
 import { BillingProvider } from "./views/billing/billingContext";
+import { TicketProvider } from "./views/tickets/TicketContext";
 
 
 
@@ -52,19 +53,21 @@ const root = createRoot(domNode);
 
 root.render(
   <Provider store={store}>
-    <BillingProvider>
-      <LinkedinProvider>
-        <LeedsProvider>
-          <PlanProvider>
-            <CustomerProvider>
-              <App />
-              <Toaster />
+    <TicketProvider>
+      <BillingProvider>
+        <LinkedinProvider>
+          <LeedsProvider>
+            <PlanProvider>
+              <CustomerProvider>
+                <App />
+                <Toaster />
 
-            </CustomerProvider>
-          </PlanProvider>
-        </LeedsProvider>
-      </LinkedinProvider>
-    </BillingProvider>
+              </CustomerProvider>
+            </PlanProvider>
+          </LeedsProvider>
+        </LinkedinProvider>
+      </BillingProvider>
+    </TicketProvider>
   </Provider>
 );
 

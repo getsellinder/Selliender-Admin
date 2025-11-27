@@ -13,13 +13,16 @@ import {
     Button,
     Select,
     Paper,
+    CircularProgress,
+    Pagination,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTicket } from "./TicketContext";
 
 const styles = {
     container: {
         padding: "20px",
-        backgroundColor: "#FFFFFF",  // WHITE BG
+        backgroundColor: "#FFFFFF", // WHITE BG
         minHeight: "100vh",
         color: "black",
     },
@@ -45,6 +48,10 @@ const styles = {
 
 const TicketingSystem = () => {
     const navigate = useNavigate();
+    const { allticketes, loading, setSearchInput, searchInput, status, setStatus, handleAllTickets, page,
+        setCurrentPage, PageLimit } = useTicket();
+    let ticketsdata = allticketes.data
+    console.log("allticketes", ticketsdata)
 
     const initialTickets = [
         {
@@ -86,7 +93,7 @@ const TicketingSystem = () => {
     const [search, setSearch] = useState("");
     const [priority, setPriority] = useState("");
     const [category, setCategory] = useState("");
-    const [status, setStatus] = useState("");
+
 
     const updateStatus = (id, newStatus) => {
         setTickets((prev) =>
@@ -102,7 +109,8 @@ const TicketingSystem = () => {
             (status ? t.status === status : true)
         );
     });
-
+    console.log("searchIntpu", searchInput)
+    console.log("status", status)
     return (
         <div style={styles.container}>
             {/* HEADER */}
@@ -119,13 +127,15 @@ const TicketingSystem = () => {
                     <TextField
                         fullWidth
                         placeholder="Search tickets..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={searchInput}
+                        onChange={(e) => {
+                            const value = e.target.value
+                            setSearchInput(value)
+                            handleAllTickets(1, PageLimit, value, status);
+                        }}
                         InputProps={{ style: styles.input }}
                     />
                 </Grid>
-
-
 
                 <Grid item xs={12} md={2}>
                     <TextField
@@ -133,13 +143,20 @@ const TicketingSystem = () => {
                         fullWidth
                         value={status}
                         label="All Statuses"
-                        onChange={(e) => setStatus(e.target.value)}
+                        onChange={(e) => {
+                            let val = e.target.value
+                            setStatus(val)
+                            handleAllTickets(1, PageLimit, searchInput, val);
+                        }}
                         InputProps={{ style: styles.input }}
                     >
                         <MenuItem value="">All</MenuItem>
-                        <MenuItem value="Open">Open</MenuItem>
-                        <MenuItem value="In Progress">In Progress</MenuItem>
-                        <MenuItem value="Closed">Closed</MenuItem>
+
+
+
+                        <MenuItem value="OPEN">Open</MenuItem>
+                        <MenuItem value="IN_PROGRESS">In Progress</MenuItem>
+                        <MenuItem value="CLOSED">Closed</MenuItem>
                     </TextField>
                 </Grid>
             </Grid>
@@ -158,8 +175,8 @@ const TicketingSystem = () => {
                                 "Created At",
                                 "Ticket ID",
                                 "Subject",
-                                // "Priority",
-                                // "Category",
+                                "Priority",
+                                "Category",
                                 "Resolved By",
                                 "Status",
                                 "Messages",
@@ -172,47 +189,86 @@ const TicketingSystem = () => {
                     </TableHead>
 
                     <TableBody>
-                        {filtered.map((row) => (
-                            <TableRow key={row.id}>
-                                <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.createdAt}</TableCell>
-                                <TableCell>{row.ticketId}</TableCell>
-                                <TableCell>{row.subject}</TableCell>
-
-                                <TableCell>{row.resolvedAt}</TableCell>
-
-                                <TableCell>
-                                    <Select
-                                        value={row.status}
-                                        onChange={(e) => updateStatus(row.id, e.target.value)}
-                                        size="small"
+                        {loading ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={10}   // number of columns in your table
+                                    align="center"
+                                    sx={{
+                                        height: "150px",
+                                        textAlign: "center",
+                                        borderBottom: "none",
+                                    }}
+                                >
+                                    <Box
                                         sx={{
-                                            backgroundColor: "#FFFFFF",
-                                            borderRadius: 1,
-                                            width: "120px",
-                                            border: "1px solid #DDD",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            height: "100%",
                                         }}
                                     >
-                                        <MenuItem value="Open">Open</MenuItem>
-                                        <MenuItem value="In Progress">In Progress</MenuItem>
-                                        <MenuItem value="Closed">Closed</MenuItem>
-                                    </Select>
-                                </TableCell>
-
-                                <TableCell>
-                                    <Button
-                                        variant="outlined"
-                                        style={styles.messageButton}
-                                        onClick={() => navigate(`/tickets/view/message/:id`)}
-                                    >
-                                        View
-                                    </Button>
+                                        <CircularProgress size={35} />
+                                    </Box>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ) : (
+                            ticketsdata?.map((row, index) => (
+                                <TableRow key={row._id}>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{row?.createdAt}</TableCell>
+                                    <TableCell>{row?.ticketId}</TableCell>
+                                    <TableCell>{row?.subject}</TableCell>
+                                    <TableCell>{row?.category}</TableCell>
+                                    <TableCell>{row?.priority}</TableCell>
+
+                                    <TableCell>{row?.resolvedAt || "-"}</TableCell>
+
+                                    <TableCell>
+                                        <Select
+                                            value={row?.status}
+                                            onChange={(e) => updateStatus(row.id, e.target.value)}
+                                            size="small"
+                                            sx={{
+                                                backgroundColor: "#FFFFFF",
+                                                borderRadius: 1,
+                                                width: "120px",
+                                                border: "1px solid #DDD",
+                                            }}
+
+
+                                        >
+                                            <MenuItem value="OPEN">Open</MenuItem>
+                                            <MenuItem value="IN_PROGRESS">In Progress</MenuItem>
+                                            <MenuItem value="CLOSED">Closed</MenuItem>
+                                        </Select>
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <Button
+                                            variant="outlined"
+                                            style={styles.messageButton}
+                                            onClick={() => navigate(`/tickets/view/message/${row._id}`)}
+                                        >
+                                            View
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Pagination sx={{ textAlign: "end", marginTop: "1rem" }}
+                count={allticketes.totalPages}
+                page={page}
+                onChange={(e, value) => {
+                    setCurrentPage(value);
+                    handleAllTickets(page, PageLimit || 10, value, status);
+                }}
+                color="primary"
+                shape="rounded"
+            />
         </div>
     );
 };
