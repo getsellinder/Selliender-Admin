@@ -1,119 +1,179 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./messages.css"; // external CSS file
+import React, { useState } from "react";
+import {
+    Box,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Avatar,
+} from "@mui/material";
 
-export default function ChatUI() {
-    const [activeId, setActiveId] = useState(1);
-    const [msg, setMsg] = useState("");
-    const scrollRef = useRef();
-
-    const contacts = [
-        {
-            id: 1,
-            name: "Dianne Johnson",
-            role: "Designer",
-            avatar: "https://i.pravatar.cc/80?img=32",
-            online: true,
-            messages: [
-                { id: 1, sender: "them", text: "Hi David, have you got the project report pdf?", time: "10:10 AM" },
-                { id: 2, sender: "me", text: "NO. I did not get it", time: "10:11 AM" },
-
-
-            ],
-        },
-        {
-            id: 2,
-            name: "Lisa Roy",
-            role: "Product Manager",
-            avatar: "https://i.pravatar.cc/80?img=12",
-            online: false,
-            messages: [{ id: 1, sender: "them", text: "Hi, are you available tomorrow?", time: "10:35 AM" }],
-        },
-    ];
-
-    const activeChat = contacts.find((c) => c.id === activeId);
-
-    const sendMessage = () => {
-        if (!msg.trim()) return;
-        activeChat.messages.push({
-            id: Date.now(),
-            sender: "me",
-            text: msg.trim(),
-            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        });
-        setMsg("");
-        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-    };
-
-    useEffect(() => {
-        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-    }, [activeId, activeChat.messages.length]);
+const ChatUI = () => {
+    const [message, setMessage] = useState("");
 
     return (
-        <div className="chat-app">
+        <Box
+            sx={{
+                display: "flex",
+                gap: 3,
+                p: 3,
+                background: "#F7F9FC",
+                minHeight: "100vh",
+            }}
+        >
+            {/* LEFT SIDE - TICKET DETAILS */}
+            <Paper
+                elevation={0}
+                sx={{
+                    width: "300px",
+                    p: 3,
+                    borderRadius: "12px",
+                    border: "1px solid #E5E7EB",
+                    background: "#FFFFFF",
+                }}
+            >
+                <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                    Ticket Details
+                </Typography>
 
-            {/* LEFT SIDEBAR */}
-            <aside>
-                <div className="profile-box">
-                    <img src="https://i.pravatar.cc/100?img=4" className="profile-avatar" alt="" />
-                    <div>
-                        <h3 className="profile-name">David Peters</h3>
-                        <p className="profile-role">Senior Developer</p>
-                    </div>
-                </div>
+                <Typography><strong>Title:</strong> Payment Credit Rewards Issue</Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Created By:</strong> John
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Priority:</strong>{" "}
+                    <span style={{ color: "red", fontWeight: 600 }}>Critical</span>
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Category:</strong> Billing
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Status:</strong>{" "}
+                    <span style={{ color: "green", fontWeight: 600 }}>Open</span>
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Created At:</strong> Dec 4, 2025
+                </Typography>
+            </Paper>
 
-                <input className="search-box" placeholder="Search Here..." />
+            {/* RIGHT SIDE - MESSAGES */}
+            <Paper
+                elevation={0}
+                sx={{
+                    flex: 1,
+                    p: 0,
+                    borderRadius: "12px",
+                    border: "1px solid #E5E7EB",
+                    background: "#FFFFFF",
+                    display: "flex",
+                    flexDirection: "column",
+                }}
+            >
+                <Box sx={{ p: 2, borderBottom: "1px solid #E5E7EB" }}>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                        Messages
+                    </Typography>
+                </Box>
 
-                <div className="contact-list">
-                    {contacts.map((c) => (
-                        <div
-                            key={c.id}
-                            className={`contact-item ${activeId === c.id ? "active" : ""}`}
-                            onClick={() => setActiveId(c.id)}
-                        >
-                            <img src={c.avatar} className="contact-avatar" alt="" />
-                            <div>
-                                <div className="contact-name">{c.name}</div>
-                                <div className="contact-last">{c.messages[c.messages.length - 1].text || "Attachment"}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </aside>
+                {/* CHAT BOX */}
+                <Box
+                    sx={{
+                        flex: 1,
+                        p: 3,
+                        overflowY: "auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 3,
+                    }}
+                >
+                    {/* LEFT MESSAGE */}
+                    <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
+                        <Avatar sx={{ bgcolor: "#D1D5DB" }} />
 
-            {/* CHAT WINDOW */}
-            <main className="chat-window">
-                <div className="chat-header">
-                    <img src={activeChat.avatar} className="chat-avatar" alt="" />
-                    <div>
-                        <h3 className="chat-name">{activeChat.name}</h3>
-                        <p className="online">{activeChat.online ? "● Online" : "Offline"}</p>
-                    </div>
-                </div>
+                        <Box>
+                            <Typography sx={{ fontSize: "14px", color: "#6B7280" }}>
+                                John • just now
+                            </Typography>
+                            <Box
+                                sx={{
+                                    background: "#F3F4F6",
+                                    p: 2,
+                                    mt: 1,
+                                    borderRadius: "12px",
+                                    maxWidth: "350px",
+                                }}
+                            >
+                                Dear Jack,
+                                <br />
+                                We do accept credit cards for mortgage payment.
+                            </Box>
+                        </Box>
+                    </Box>
 
-                <div className="chat-body" ref={scrollRef}>
-                    {activeChat.messages.map((m) => (
-                        <div key={m.id} className={`bubble ${m.sender}`}>
-                            {m.text && <p className="bubble-text">{m.text}</p>}
-                            {m.attachment && (
-                                <div className="attachment">
-                                    📄 {m.attachment}
-                                </div>
-                            )}
-                            <span className="bubble-time">{m.time}</span>
-                        </div>
-                    ))}
-                </div>
+                    {/* RIGHT MESSAGE */}
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                        <Box sx={{ textAlign: "right" }}>
+                            <Typography sx={{ fontSize: "14px", color: "#6B7280" }}>
+                                Jack Smith • 2 mins ago
+                            </Typography>
 
-                {/* MESSAGE INPUT */}
-                <div className="chat-input">
-                    <textarea
-                        placeholder="Write Something..."
-                        value={msg}
-                        onChange={(e) => setMsg(e.target.value)}
+                            <Box
+                                sx={{
+                                    background: "#3B82F6",
+                                    color: "white",
+                                    p: 2,
+                                    mt: 1,
+                                    borderRadius: "12px",
+                                    maxWidth: "350px",
+                                    ml: "auto",
+                                }}
+                            >
+                                Will I earn credit rewards if I pay the instalment using my
+                                credit card?
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+
+                {/* MESSAGE INPUT BAR */}
+                <Box
+                    sx={{
+                        p: 2,
+                        borderTop: "1px solid #E5E7EB",
+                        display: "flex",
+                        gap: 2,
+                        alignItems: "center",
+                    }}
+                >
+                    <TextField
+                        fullWidth
+                        placeholder="Type your message..."
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        sx={{
+                            background: "#FFFFFF",
+                            borderRadius: "8px",
+                            "& .MuiOutlinedInput-root": {
+                                borderRadius: "8px",
+                            },
+                        }}
                     />
-                    <button className="send-btn" onClick={sendMessage}>➤</button>
-                </div>
-            </main>
-        </div>
+
+                    <Button
+                        variant="contained"
+                        sx={{
+                            background: "#3B82F6",
+                            textTransform: "none",
+                            px: 4,
+                            borderRadius: "8px",
+                        }}
+                    >
+                        Send
+                    </Button>
+                </Box>
+            </Paper>
+        </Box>
     );
-}
+};
+
+export default ChatUI;

@@ -13,61 +13,39 @@ import {
     Button,
     Select,
     Paper,
-    createTheme,
-    ThemeProvider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-// DARK THEME EXACTLY LIKE YOUR SCREENSHOT
-const darkTheme = createTheme({
-    palette: {
-        mode: "dark",
-        background: {
-            default: "#0E1525",
-            paper: "#111927",
-        },
-        text: {
-            primary: "#FFFFFF",
-            secondary: "#A0AEC0",
-        },
-    },
-    typography: {
-        fontFamily: "Inter, sans-serif",
-    },
-});
-
-// Custom styles matching screenshot
 const styles = {
     container: {
         padding: "20px",
-        backgroundColor: "#0E1525",
-        // backgroundColor: "#c6cbd7ff",
+        backgroundColor: "#FFFFFF",  // WHITE BG
         minHeight: "100vh",
-        color: "white",
+        color: "black",
     },
     input: {
-        backgroundColor: "#1A2332",
+        backgroundColor: "#FFFFFF", // WHITE INPUTS
         borderRadius: 8,
     },
     paper: {
-        backgroundColor: "#111927",
+        backgroundColor: "#FFFFFF", // WHITE TABLE
         borderRadius: 12,
-        border: "1px solid #2D3A4B",
+        border: "1px solid #E0E0E0",
     },
     tableHeader: {
-        backgroundColor: "#1A2332",
+        backgroundColor: "#F5F5F5", // LIGHT GREY HEADER
     },
     messageButton: {
-        color: "#4A90E2",
-        borderColor: "#4A90E2",
+        color: "#2196F3",
+        borderColor: "#2196F3",
         textTransform: "none",
         borderRadius: 8,
     },
 };
 
-
 const TicketingSystem = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
     const initialTickets = [
         {
             id: 1,
@@ -105,7 +83,6 @@ const TicketingSystem = () => {
     ];
 
     const [tickets, setTickets] = useState(initialTickets);
-
     const [search, setSearch] = useState("");
     const [priority, setPriority] = useState("");
     const [category, setCategory] = useState("");
@@ -127,149 +104,116 @@ const TicketingSystem = () => {
     });
 
     return (
-        <ThemeProvider theme={darkTheme}>
-            <div style={styles.container}>
-                {/* HEADER */}
-                <Typography variant="h4" sx={{ mb: 1, fontWeight: 600 }}>
-                    Ticketing System
-                </Typography>
-                <Typography sx={{ mb: 3, color: "#A0AEC0" }}>
-                    Log, track, and resolve issues reported by tenant admins.
-                </Typography>
+        <div style={styles.container}>
+            {/* HEADER */}
+            <Typography variant="h4" sx={{ mb: 1, fontWeight: 600 }}>
+                Ticketing System
+            </Typography>
+            <Typography sx={{ mb: 3, color: "#555" }}>
+                Log, track, and resolve issues reported by tenant admins.
+            </Typography>
 
-                {/* FILTERS */}
-                <Grid container spacing={2} sx={{ mb: 3 }}>
-                    <Grid item xs={12} md={4}>
-                        <TextField
-                            fullWidth
-                            placeholder="Search tickets..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            InputProps={{ style: styles.input }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                        <TextField
-                            select
-                            fullWidth
-                            value={priority}
-                            label="All Priorities"
-                            onChange={(e) => setPriority(e.target.value)}
-                            InputProps={{ style: styles.input }}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            <MenuItem value="High">High</MenuItem>
-                            <MenuItem value="Medium">Medium</MenuItem>
-                            <MenuItem value="Low">Low</MenuItem>
-                            <MenuItem value="N/A">N/A</MenuItem>
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                        <TextField
-                            select
-                            fullWidth
-                            value={category}
-                            label="All Categories"
-                            onChange={(e) => setCategory(e.target.value)}
-                            InputProps={{ style: styles.input }}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            <MenuItem value="Technical">Technical</MenuItem>
-                            <MenuItem value="N/A">N/A</MenuItem>
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} md={2}>
-                        <TextField
-                            select
-                            fullWidth
-                            value={status}
-                            label="All Statuses"
-                            onChange={(e) => setStatus(e.target.value)}
-                            InputProps={{ style: styles.input }}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            <MenuItem value="Open">Open</MenuItem>
-                            <MenuItem value="In Progress">In Progress</MenuItem>
-                            <MenuItem value="Closed">Closed</MenuItem>
-                        </TextField>
-                    </Grid>
+            {/* FILTERS */}
+            <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid item xs={12} md={4}>
+                    <TextField
+                        fullWidth
+                        placeholder="Search tickets..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        InputProps={{ style: styles.input }}
+                    />
                 </Grid>
 
-                <Typography sx={{ mb: 1, color: "#A0AEC0" }}>
-                    Showing {filtered.length} tickets
-                </Typography>
-
-                {/* TABLE */}
-                <TableContainer component={Paper} style={styles.paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow style={styles.tableHeader}>
-                                {[
-                                    "",
-                                    "Created At",
-                                    "Ticket ID",
-                                    "Subject",
-                                    "Priority",
-                                    "Category",
 
 
-                                    "Resolved By",
-                                    "Status",
-                                    "Messages",
-                                ].map((head) => (
-                                    <TableCell key={head} sx={{ color: "white", fontWeight: 600 }}>
-                                        {head}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
+                <Grid item xs={12} md={2}>
+                    <TextField
+                        select
+                        fullWidth
+                        value={status}
+                        label="All Statuses"
+                        onChange={(e) => setStatus(e.target.value)}
+                        InputProps={{ style: styles.input }}
+                    >
+                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="Open">Open</MenuItem>
+                        <MenuItem value="In Progress">In Progress</MenuItem>
+                        <MenuItem value="Closed">Closed</MenuItem>
+                    </TextField>
+                </Grid>
+            </Grid>
 
-                        <TableBody>
-                            {filtered.map((row) => (
-                                <TableRow key={row.id}>
-                                    <TableCell>{row.id}</TableCell>
-                                    <TableCell>{row.createdAt}</TableCell>
-                                    <TableCell>{row.ticketId}</TableCell>
-                                    <TableCell>{row.subject}</TableCell>
-                                    <TableCell>{row.priority}</TableCell>
-                                    <TableCell>{row.category}</TableCell>
+            <Typography sx={{ mb: 1, color: "#555" }}>
+                Showing {filtered.length} tickets
+            </Typography>
 
-
-                                    <TableCell>{row.resolvedAt}</TableCell>
-
-                                    <TableCell>
-                                        <Select
-                                            value={row.status}
-                                            onChange={(e) => updateStatus(row.id, e.target.value)}
-                                            size="small"
-                                            sx={{
-                                                backgroundColor: "#1A2332",
-                                                borderRadius: 1,
-                                                width: "120px",
-                                            }}
-                                        >
-                                            <MenuItem value="Open">Open</MenuItem>
-                                            <MenuItem value="In Progress">In Progress</MenuItem>
-                                            <MenuItem value="Closed">Closed</MenuItem>
-                                        </Select>
-                                    </TableCell>
-
-                                    <TableCell>
-                                        <Button variant="outlined" style={styles.messageButton} onClick={() => navigate(`/tickets/view/message/:id`)}>
-                                            View
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
+            {/* TABLE */}
+            <TableContainer component={Paper} style={styles.paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow style={styles.tableHeader}>
+                            {[
+                                "",
+                                "Created At",
+                                "Ticket ID",
+                                "Subject",
+                                // "Priority",
+                                // "Category",
+                                "Resolved By",
+                                "Status",
+                                "Messages",
+                            ].map((head) => (
+                                <TableCell key={head} sx={{ fontWeight: 600 }}>
+                                    {head}
+                                </TableCell>
                             ))}
-                        </TableBody>
+                        </TableRow>
+                    </TableHead>
 
-                    </Table>
-                </TableContainer>
-            </div>
-        </ThemeProvider>
+                    <TableBody>
+                        {filtered.map((row) => (
+                            <TableRow key={row.id}>
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{row.createdAt}</TableCell>
+                                <TableCell>{row.ticketId}</TableCell>
+                                <TableCell>{row.subject}</TableCell>
+
+                                <TableCell>{row.resolvedAt}</TableCell>
+
+                                <TableCell>
+                                    <Select
+                                        value={row.status}
+                                        onChange={(e) => updateStatus(row.id, e.target.value)}
+                                        size="small"
+                                        sx={{
+                                            backgroundColor: "#FFFFFF",
+                                            borderRadius: 1,
+                                            width: "120px",
+                                            border: "1px solid #DDD",
+                                        }}
+                                    >
+                                        <MenuItem value="Open">Open</MenuItem>
+                                        <MenuItem value="In Progress">In Progress</MenuItem>
+                                        <MenuItem value="Closed">Closed</MenuItem>
+                                    </Select>
+                                </TableCell>
+
+                                <TableCell>
+                                    <Button
+                                        variant="outlined"
+                                        style={styles.messageButton}
+                                        onClick={() => navigate(`/tickets/view/message/:id`)}
+                                    >
+                                        View
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 };
 
