@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Box,
     Paper,
@@ -22,6 +22,7 @@ const ChatUI = () => {
     const { handleViewTicketMessages, allmessages, loading, userId } =
         useTicket();
     const { id } = useParams();
+    const messagesEndRef = useRef(null)
 
     let messages = allmessages?.messages;
     const receiverId = allmessages?.userId?._id;
@@ -53,6 +54,11 @@ const ChatUI = () => {
     useEffect(() => {
         handleViewTicketMessages(id);
     }, [id]);
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+    }, [messages]);
 
     return (
         <Box
@@ -121,13 +127,15 @@ const ChatUI = () => {
             <Paper
                 elevation={0}
                 sx={{
-                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    // Pick a height that fits your layout. You can change this to '100%' if parent has fixed height.
+                    height: 550,
                     p: 0,
                     borderRadius: "12px",
                     border: "1px solid #E5E7EB",
                     background: "#FFFFFF",
-                    display: "flex",
-                    flexDirection: "column",
+                    width: "100%"
                 }}
             >
                 <Box sx={{ p: 2, borderBottom: "1px solid #E5E7EB" }}>
@@ -136,14 +144,15 @@ const ChatUI = () => {
                     </Typography>
                 </Box>
 
-                {/* CHAT BOX */}
+                {/* CHAT BOX (scrollable) */}
                 {loading ? (
                     <Box
                         sx={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            height: "50%",
+                            flex: 1,
+                            minHeight: 200,
                         }}
                     >
                         <CircularProgress size={25} />
@@ -151,13 +160,12 @@ const ChatUI = () => {
                 ) : (
                     <Box
                         sx={{
-                            flex: 1,
+                            flex: 1, // key: take remaining vertical space
                             p: 3,
-                            overflowY: "auto",
+                            overflowY: "auto", // key: messages scroll here only
                             display: "flex",
                             flexDirection: "column",
-                            gap: 3,
-                            height: "40%",
+                            gap: 2,
                         }}
                     >
                         {messages?.length === 0 ? (
@@ -166,18 +174,17 @@ const ChatUI = () => {
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    height: "50%",
+                                    flex: 1,
                                 }}
                             >
                                 <Typography>Start Conversation</Typography>
                             </Box>
                         ) : (
                             messages?.map((msg, index) => {
-                                const isSender = msg.receiverId._id === userId;
-
+                                const isSender = msg.senderId?._id === userId;
                                 return (
                                     <Box
-                                        key={index}
+                                        key={msg._id || index}
                                         sx={{
                                             display: "flex",
                                             justifyContent: isSender ? "flex-end" : "flex-start",
@@ -186,20 +193,16 @@ const ChatUI = () => {
                                     >
                                         <Box
                                             sx={{
-                                                maxWidth: "60%",
+                                                width: "60%",
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 alignItems: isSender ? "flex-end" : "flex-start",
                                             }}
                                         >
-                                            {/* NAME (ABOVE message bubble) */}
-                                            <Typography
-                                                sx={{ fontSize: "12px", color: "#6B7280", mb: 0.5 }}
-                                            >
-                                                {msg.senderName}
+                                            <Typography sx={{ fontSize: "12px", color: "#6B7280", mb: 0.5 }}>
+                                                {isSender ? "You" : msg.senderName}
                                             </Typography>
 
-                                            {/* MESSAGE BUBBLE */}
                                             <Box
                                                 sx={{
                                                     background: isSender ? "#3B82F6" : "#F3F4F6",
@@ -207,16 +210,13 @@ const ChatUI = () => {
                                                     p: 2,
                                                     borderRadius: "12px",
                                                     wordBreak: "break-word",
-                                                    maxWidth: "100%",
+                                                    width: "100%",
                                                 }}
                                             >
                                                 {msg.message}
                                             </Box>
 
-                                            {/* TIME (BELOW message bubble) */}
-                                            <Typography
-                                                sx={{ fontSize: "10px", color: "#9CA3AF", mt: 0.5 }}
-                                            >
+                                            <Typography sx={{ fontSize: "10px", color: "#9CA3AF", mt: 0.5 }}>
                                                 {msg.time || msg.createdAt}
                                             </Typography>
                                         </Box>
@@ -224,10 +224,13 @@ const ChatUI = () => {
                                 );
                             })
                         )}
+
+                        {/* invisible anchor to scroll to */}
+                        <div ref={messagesEndRef} />
                     </Box>
                 )}
 
-                {/* MESSAGE INPUT BAR */}
+                {/* MESSAGE INPUT BAR (always visible; not scrollable) */}
                 <Box
                     sx={{
                         p: 2,
@@ -242,6 +245,12 @@ const ChatUI = () => {
                         placeholder="Type your message..."
                         value={sentMessage}
                         onChange={(e) => setSentMessage(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                handleMessages(allmessages._id);
+                            }
+                        }}
                         sx={{
                             background: "#FFFFFF",
                             borderRadius: "8px",
@@ -249,6 +258,9 @@ const ChatUI = () => {
                                 borderRadius: "8px",
                             },
                         }}
+                        multiline
+                        minRows={1}
+                        maxRows={4}
                     />
 
                     <Button
