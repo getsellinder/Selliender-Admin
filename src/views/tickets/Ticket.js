@@ -286,16 +286,23 @@ const TicketingSystem = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Pagination sx={{ textAlign: "end", marginTop: "1rem" }}
-                count={allticketes.totalPages}
+            {/* <Pagination
+                sx={{ textAlign: "end", marginTop: "1rem" }}
+                count={allticketes.totalPage}     // ✔ correct
                 page={page}
                 onChange={(e, value) => {
                     setCurrentPage(value);
-                    handleAllTickets(page, PageLimit || 10, value, status);
+                    handleAllTickets(value, PageLimit || 5, searchInput, status); // ✔ correct
                 }}
                 color="primary"
                 shape="rounded"
-            />
+            /> */}
+            <Pagination sx={{ textAlign: "end", marginTop: "1rem" }}
+                count={allticketes.totalPage}
+                onChange={(e, value) => {
+                    setCurrentPage(value)
+                    handleAllTickets(value, PageLimit || 5, searchInput, status);
+                }} color="primary" shape="rounded" />
         </div>
     );
 };
