@@ -18,6 +18,10 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useTicket } from "./TicketContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { isAutheticated } from "src/auth";
+import { Box } from "@material-ui/core";
 
 const styles = {
     container: {
@@ -47,7 +51,11 @@ const styles = {
 };
 
 const TicketingSystem = () => {
+    const [statuschange, setStatusChange] = useState("")
+    const [statusLoading, setStatusLoading] = useState(null)
     const navigate = useNavigate();
+    const token = isAutheticated()
+
     const { allticketes, loading, setSearchInput, searchInput, status, setStatus, handleAllTickets, page,
         setCurrentPage, PageLimit } = useTicket();
     let ticketsdata = allticketes.data
@@ -95,11 +103,7 @@ const TicketingSystem = () => {
     const [category, setCategory] = useState("");
 
 
-    const updateStatus = (id, newStatus) => {
-        setTickets((prev) =>
-            prev.map((t) => (t.id === id ? { ...t, status: newStatus } : t))
-        );
-    };
+
 
     const filtered = tickets.filter((t) => {
         return (
@@ -109,8 +113,31 @@ const TicketingSystem = () => {
             (status ? t.status === status : true)
         );
     });
-    console.log("searchIntpu", searchInput)
-    console.log("status", status)
+    const handlestatus = async (id, newStatus) => {
+        // ticket id i am passing heare
+        let data = {
+            status: newStatus
+        }
+        try {
+            setStatusLoading(id)
+            const resp = await axios.put(
+                `/api/support/update/status/${id}`,
+                data,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            const message = resp?.data?.response
+            handleAllTickets(1, PageLimit, searchInput, status);
+            toast.success(message || "Updated Successfully")
+
+        } catch (error) {
+            let msg = error?.response?.data?.error
+            console.log("msg", msg)
+            console.log("handlestatus", handlestatus)
+        } finally {
+            setStatusLoading(null)
+        }
+    }
+
     return (
         <div style={styles.container}>
             {/* HEADER */}
@@ -226,8 +253,8 @@ const TicketingSystem = () => {
 
                                     <TableCell>
                                         <Select
-                                            value={row?.status}
-                                            onChange={(e) => updateStatus(row.id, e.target.value)}
+                                            value={row.status}
+                                            onChange={(e) => handlestatus(row._id, e.target.value)}
                                             size="small"
                                             sx={{
                                                 backgroundColor: "#FFFFFF",

@@ -22,7 +22,8 @@ const ChatUI = () => {
     const { handleViewTicketMessages, allmessages, loading, userId } =
         useTicket();
     const { id } = useParams();
-    const messagesEndRef = useRef(null)
+    console.log("userparams", id)
+    const messagesEndRef = useRef(null);
 
     let messages = allmessages?.messages;
     const receiverId = allmessages?.userId?._id;
@@ -56,9 +57,13 @@ const ChatUI = () => {
     }, [id]);
     useEffect(() => {
         if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+            messagesEndRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            });
         }
     }, [messages]);
+    console.log("allmessages", allmessages)
 
     return (
         <Box
@@ -135,7 +140,7 @@ const ChatUI = () => {
                     borderRadius: "12px",
                     border: "1px solid #E5E7EB",
                     background: "#FFFFFF",
-                    width: "100%"
+                    width: "100%",
                 }}
             >
                 <Box sx={{ p: 2, borderBottom: "1px solid #E5E7EB" }}>
@@ -181,7 +186,11 @@ const ChatUI = () => {
                             </Box>
                         ) : (
                             messages?.map((msg, index) => {
+                                console.log("msg", msg)
                                 const isSender = msg.senderId?._id === userId;
+
+                                console.log("userId", userId)
+                                console.log(" msg.senderId?._id", msg.senderId?._id)
                                 return (
                                     <Box
                                         key={msg._id || index}
@@ -199,7 +208,9 @@ const ChatUI = () => {
                                                 alignItems: isSender ? "flex-end" : "flex-start",
                                             }}
                                         >
-                                            <Typography sx={{ fontSize: "12px", color: "#6B7280", mb: 0.5 }}>
+                                            <Typography
+                                                sx={{ fontSize: "12px", color: "#6B7280", mb: 0.5 }}
+                                            >
                                                 {isSender ? "You" : msg.senderName}
                                             </Typography>
 
@@ -216,7 +227,9 @@ const ChatUI = () => {
                                                 {msg.message}
                                             </Box>
 
-                                            <Typography sx={{ fontSize: "10px", color: "#9CA3AF", mt: 0.5 }}>
+                                            <Typography
+                                                sx={{ fontSize: "10px", color: "#9CA3AF", mt: 0.5 }}
+                                            >
                                                 {msg.time || msg.createdAt}
                                             </Typography>
                                         </Box>
