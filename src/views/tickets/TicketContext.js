@@ -6,7 +6,7 @@ const { createContext, useContext, useState, useEffect } = require("react");
 const TicketContext = createContext();
 export const TicketProvider = ({ children }) => {
     const userdata = JSON.parse(localStorage.getItem("userdetails"))
-    let userId = userdata.user._id
+    let userId = userdata?.user?._id || null
     const [loading, setLoading] = useState(false)
     const [allticketes, setAllTicketes] = useState([])
     const [searchInput, setSearchInput] = useState("")
